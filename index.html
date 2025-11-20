@@ -92,6 +92,17 @@
       letter-spacing: 1px;
       word-break: break-all;
     }
+    ul.reminder-list {
+      margin-top: 5px;
+      margin-bottom: 0;
+      padding-left: 25px;
+    }
+    ul.reminder-list li {
+      margin-bottom: 9px;
+      font-size: 18px;
+      line-height: 1.7;
+      font-weight: 500;
+    }
     @media(max-width: 680px) {
       body {flex-direction: column;}
       #dateList {
@@ -123,7 +134,6 @@
     <div id="reminder"></div>
   </div>
   <script>
-    // 所有日期都必須和 data 結構一致
     const allDates = [
       "2025-12-04", "2025-12-05", "2025-12-06",
       "2025-12-07", "2025-12-08", "2025-12-09"
@@ -134,53 +144,56 @@
     const itineraryDiv = document.getElementById("itinerary");
     const reminderDiv = document.getElementById("reminder");
 
-    // 資料格式務必正確（不要亂用中文標點或省略逗號）
+    // 資料，每個 reminder 一律都是陣列（就算只有一條也不要用字串）
     const data = {
-     "2025-12-04": {
+      "2025-12-04": {
         itinerary: [
           { time: "午餐", name: "釜萬", location: "釜萬" },
           { time: "逛", name: "GU Kumanan", location:"GU Kumanan" },
           { time: "逛", name: "Uniqloユニクロ 熊南店", location: "Uniqloユニクロ 熊南店" },
-       { time: "逛", name: "Uniqloユニクロ 熊南店", location: "Uniqloユニクロ 熊南店" },
- { time: "airbnb 15:00～23:00", name: "airbnb ", location: "2-chōme-8-54 Rendaiji" }
+          { time: "逛", name: "Uniqloユニクロ 熊南店", location: "Uniqloユニクロ 熊南店" },
+          { time: "airbnb 15:00～23:00", name: "airbnb ", location: "2-chōme-8-54 Rendaiji" }
         ],
-        reminder: ["【客運】台中 - 桃園 
-火車站發車 03:01(朝馬+30分)", "【航班】JX846 07:30-10:35", "【BUDGET租賃】 預約號碼 : 00009540394"]
+        reminder: [
+          "【客運】台中 - 桃園 火車站發車 03:01(朝馬+30分)",
+          "【航班】JX846 07:30-10:35",
+          "【BUDGET租賃】 預約號碼 : 00009540394"
+        ]
       },
       "2025-12-05": {
         itinerary: [
           { time: "", name: "柳川川下り伯舟觀光", location: "柳川" },
           { time: "", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖" }
         ],
-        reminder: "記得攜帶防曬用品。"
+        reminder: [ "記得攜帶防曬用品。" ]
       },
       "2025-12-06": {
         itinerary: [
           { time: "10:00", name: "西溪公園", location: "西溪" },
           { time: "15:00", name: "武雄神社", location: "武雄市" }
         ],
-        reminder: ""
+        reminder: []
       },
       "2025-12-07": {
         itinerary: [
           { time: "", name: "門司港懷舊區", location: "門司港" },
           { time: "", name: "九州鐵道紀念館", location: "門司港" }
         ],
-        reminder: ""
+        reminder: []
       },
       "2025-12-08": {
         itinerary: [
           { time: "09:00", name: "王貞治棒球紀念館", location: "福岡" },
           { time: "", name: "幸福pancake 福岡天神店", location: "福岡" }
         ],
-        reminder: "別忘帶相機拍照！"
+        reminder: [ "別忘帶相機拍照！" ]
       },
       "2025-12-09": {
         itinerary: [
           { time: "11:45-13:25", name: "航班 JX847", location: "福岡機場" },
           { time: "", name: "珀塔瑪 阿蘇熊本機場店", location: "阿蘇熊本" }
         ],
-        reminder: "確認還車手續。"
+        reminder: [ "確認還車手續。" ]
       }
     };
 
@@ -203,12 +216,12 @@
       if (!currentDate) {
         dateTitle.textContent = "請選擇日期";
         itineraryDiv.innerHTML = "";
-        reminderDiv.textContent = "";
+        reminderDiv.innerHTML = "";
         return;
       }
       dateTitle.textContent = currentDate;
       itineraryDiv.innerHTML = "";
-      reminderDiv.textContent = "";
+      reminderDiv.innerHTML = "";
 
       const dayData = data[currentDate];
       if (!dayData || dayData.itinerary.length === 0) {
@@ -222,10 +235,14 @@
           itineraryDiv.appendChild(div);
         });
       }
-      if (dayData.reminder) {
-        reminderDiv.textContent = "提醒：" + dayData.reminder;
+      // 多條提醒用 ul li 顯示
+      if (dayData.reminder && dayData.reminder.length > 0) {
+        reminderDiv.innerHTML =
+          `<div style="font-weight:700;">提醒：</div><ul class="reminder-list">${
+            dayData.reminder.map(r => `<li>${r}</li>`).join("")
+          }</ul>`;
       } else {
-        reminderDiv.textContent = "";
+        reminderDiv.innerHTML = "";
       }
     }
     // 初始化
