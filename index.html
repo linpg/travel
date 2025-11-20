@@ -92,21 +92,6 @@
       letter-spacing: 1px;
       word-break: break-all;
     }
-    /* 美化滾動條 */
-    #dateList::-webkit-scrollbar {
-      width: 8px;
-    }
-    #dateList::-webkit-scrollbar-thumb {
-      background-color: #b2ebf2;
-      border-radius: 4px;
-    }
-    #details::-webkit-scrollbar {
-      width: 9px;
-    }
-    #details::-webkit-scrollbar-thumb {
-      background-color: #b2ebf2;
-      border-radius: 5px;
-    }
     @media(max-width: 680px) {
       body {flex-direction: column;}
       #dateList {
@@ -138,6 +123,7 @@
     <div id="reminder"></div>
   </div>
   <script>
+    // 所有日期都必須和 data 結構一致
     const allDates = [
       "2025-12-04", "2025-12-05", "2025-12-06",
       "2025-12-07", "2025-12-08", "2025-12-09"
@@ -147,7 +133,8 @@
     const dateTitle = document.getElementById("dateTitle");
     const itineraryDiv = document.getElementById("itinerary");
     const reminderDiv = document.getElementById("reminder");
-    // 固定資料（可擴充）
+
+    // 資料格式務必正確（不要亂用中文標點或省略逗號）
     const data = {
       "2025-12-04": {
         itinerary: [
@@ -192,6 +179,7 @@
         reminder: "確認還車手續。"
       }
     };
+
     function loadDates() {
       dateListDiv.innerHTML = "";
       allDates.forEach(date => {
@@ -205,6 +193,7 @@
         dateListDiv.appendChild(btn);
       });
     }
+
     function refreshUI() {
       loadDates();
       if (!currentDate) {
@@ -216,6 +205,7 @@
       dateTitle.textContent = currentDate;
       itineraryDiv.innerHTML = "";
       reminderDiv.textContent = "";
+
       const dayData = data[currentDate];
       if (!dayData || dayData.itinerary.length === 0) {
         itineraryDiv.innerHTML = `<div style="font-size:19px; color:#888; margin:32px 0;">尚未設定行程。</div>`;
@@ -224,4 +214,19 @@
           const div = document.createElement("div");
           div.classList.add("item");
           div.innerHTML =
-            `<span class="info-left">${item.time ? `[${item.time}] ` : ""}${item.name} - <a class="location-link" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(item.location
+            `<span class="info-left">${item.time ? `[${item.time}] ` : ""}${item.name} - <a class="location-link" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(item.location)}" target="_blank">${item.location}</a></span>`;
+          itineraryDiv.appendChild(div);
+        });
+      }
+      if (dayData.reminder) {
+        reminderDiv.textContent = "提醒：" + dayData.reminder;
+      } else {
+        reminderDiv.textContent = "";
+      }
+    }
+    // 初始化
+    currentDate = allDates[0];
+    refreshUI();
+  </script>
+</body>
+</html>
