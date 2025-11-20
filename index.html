@@ -1,29 +1,260 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>可编辑行程管理</title>
+  <title>可編輯行程管理</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; display: flex; height: 100vh; }
-    #dateList { width: 150px; border-right: 1px solid #ddd; padding: 10px; box-sizing: border-box; overflow-y: auto; }
-    #dateList button { display: block; width: 100%; padding: 8px; margin-bottom: 5px; border: none; background: #f0f0f0; cursor: pointer; }
-    #dateList button.active { background: #4285f4; color: white; }
-    #details { flex-grow: 1; padding: 20px; }
-    h2 { margin-top: 0; }
-    .item { margin-bottom: 10px; }
-    .location-link { color: #4285f4; cursor: pointer; text-decoration: underline; margin-right: 10px; }
-    .btn { margin-left: 5px; padding: 2px 6px; cursor: pointer; border: 1px solid #ccc; border-radius: 3px; background: #eee; }
-    #reminder { margin-top: 20px; padding: 10px; background: #fff3cd; border: 1px solid #ffeeba; color: #856404; }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      display: flex;
+      height: 100vh;
+      background: #f9fafb;
+      color: #333;
+    }
+    #dateList {
+      width: 180px;
+      border-right: 1px solid #e1e4e8;
+      padding: 20px 10px;
+      box-sizing: border-box;
+      background: #ffffff;
+      overflow-y: auto;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+    }
+    #dateList button {
+      display: block;
+      width: 100%;
+      padding: 12px 8px;
+      margin-bottom: 8px;
+      border: none;
+      border-radius: 6px;
+      background: #e8f0fe;
+      color: #1a73e8;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.3s;
+      box-shadow: inset 0 0 0 0 transparent;
+    }
+    #dateList button:hover:not(.active) {
+      background: #d2e3fc;
+      box-shadow: inset 2px 2px 6px #b6c8f9, inset -2px -2px 6px #ffffff;
+    }
+    #dateList button.active {
+      background: #1a73e8;
+      color: white;
+      box-shadow: 0 4px 10px rgba(26, 115, 232, 0.5);
+    }
+    #details {
+      flex-grow: 1;
+      padding: 30px 40px;
+      overflow-y: auto;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 28px;
+      font-weight: 700;
+      color: #202124;
+      border-bottom: 3px solid #1a73e8;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+    .item {
+      background: white;
+      margin-bottom: 12px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 16px;
+    }
+    .info-left {
+      flex-grow: 1;
+      overflow-wrap: break-word;
+    }
+    .location-link {
+      color: #1a73e8;
+      cursor: pointer;
+      text-decoration: underline;
+      margin-left: 6px;
+      font-weight: 600;
+      user-select: text;
+    }
+    .btn-group {
+      margin-left: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      padding: 6px 12px;
+      cursor: pointer;
+      border: 1.5px solid #d2d2d2;
+      border-radius: 6px;
+      background: #f5f5f5;
+      color: #555;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .btn:hover {
+      background: #1a73e8;
+      border-color: #1a73e8;
+      color: white;
+      box-shadow: 0 2px 8px rgba(26,115,232,0.4);
+    }
+    #reminder {
+      margin-top: 30px;
+      padding: 15px 25px;
+      background: #fff9db;
+      border-left: 6px solid #fbbc04;
+      border-radius: 12px;
+      font-size: 17px;
+      max-width: 700px;
+      box-shadow: 0 3px 8px rgba(251,188,4,0.3);
+      user-select: none;
+    }
+    #addBtn {
+      margin-top: 30px;
+      padding: 14px 25px;
+      border: none;
+      border-radius: 12px;
+      background: #1a73e8;
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(26,115,232,0.6);
+      transition: background 0.3s;
+      user-select: none;
+    }
+    #addBtn:hover {
+      background: #0f51c6;
+    }
+
+    /* 彈窗樣式 */
     #formOverlay {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
     }
     #formBox {
-      background: white; padding: 20px; border-radius: 8px; width: 300px;
+      background: white;
+      padding: 30px 30px 35px;
+      border-radius: 14px;
+      width: 340px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      font-size: 16px;
+      color: #222;
     }
-    #formBox label { display: block; margin: 8px 0 4px;}
-    #formBox input { width: 100%; padding: 6px; box-sizing: border-box; }
-    #formBox button { margin-top: 12px; padding: 8px 12px; cursor: pointer; }
+    #formBox h3 {
+      margin-top: 0;
+      font-weight: 700;
+      font-size: 24px;
+      color: #1a73e8;
+      text-align: center;
+      margin-bottom: 18px;
+      user-select: none;
+    }
+    #formBox label {
+      display: block;
+      margin: 10px 0 6px;
+      font-weight: 600;
+      color: #555;
+      user-select: none;
+    }
+    #formBox input {
+      width: 100%;
+      padding: 8px 12px;
+      box-sizing: border-box;
+      font-size: 15px;
+      border: 1.8px solid #cfd7e3;
+      border-radius: 8px;
+      transition: border-color 0.25s;
+    }
+    #formBox input:focus {
+      outline: none;
+      border-color: #1a73e8;
+      box-shadow: 0 0 8px rgba(26,115,232,0.4);
+    }
+    #formBox button {
+      margin-top: 20px;
+      padding: 12px 0;
+      width: 48%;
+      font-weight: 700;
+      font-size: 17px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    #saveBtn {
+      background-color: #1a73e8;
+      color: white;
+    }
+    #saveBtn:hover {
+      background-color: #0f51c6;
+    }
+    #cancelBtn {
+      background-color: #ccc;
+      color: #333;
+      margin-left: 4%;
+    }
+    #cancelBtn:hover {
+      background-color: #999;
+      color: white;
+    }
+
+    /* 美化滾動條 */
+    #dateList::-webkit-scrollbar {
+      width: 8px;
+    }
+    #dateList::-webkit-scrollbar-thumb {
+      background-color: #1a73e8;
+      border-radius: 4px;
+    }
+    #details::-webkit-scrollbar {
+      width: 10px;
+    }
+    #details::-webkit-scrollbar-thumb {
+      background-color: #a5abb6;
+      border-radius: 5px;
+    }
+
+    /* 響應式 */
+    @media(max-width: 600px) {
+      body {
+        flex-direction: column;
+      }
+      #dateList {
+        width: 100%;
+        height: 100px;
+        display: flex;
+        overflow-x: auto;
+        border-right: none;
+        border-bottom: 1px solid #e1e4e8;
+        padding: 10px 5px;
+      }
+      #dateList button {
+        flex: none;
+        margin-right: 8px;
+        margin-bottom: 0;
+      }
+      #details {
+        padding: 15px 20px;
+        height: calc(100vh - 100px);
+        overflow-y: auto;
+      }
+    }
   </style>
 </head>
 <body>
@@ -37,14 +268,14 @@
     <div id="reminder"></div>
   </div>
 
-  <!-- 编辑/新增表单弹窗 -->
+  <!-- 編輯/新增表單彈窗 -->
   <div id="formOverlay">
     <div id="formBox">
       <h3 id="formTitle">新增行程</h3>
       <label for="timeInput">時間</label>
       <input type="text" id="timeInput" placeholder="例如 07:30-10:35" />
 
-      <label for="nameInput">名称</label>
+      <label for="nameInput">名稱</label>
       <input type="text" id="nameInput" placeholder="行程名稱或活動" />
 
       <label for="locationInput">地點</label>
@@ -58,224 +289,4 @@
   <script>
     const dateListDiv = document.getElementById("dateList");
     const dateTitle = document.getElementById("dateTitle");
-    const itineraryDiv = document.getElementById("itinerary");
-    const reminderDiv = document.getElementById("reminder");
-    const addBtn = document.getElementById("addBtn");
-
-    const formOverlay = document.getElementById("formOverlay");
-    const formTitle = document.getElementById("formTitle");
-    const timeInput = document.getElementById("timeInput");
-    const nameInput = document.getElementById("nameInput");
-    const locationInput = document.getElementById("locationInput");
-    const saveBtn = document.getElementById("saveBtn");
-    const cancelBtn = document.getElementById("cancelBtn");
-
-    let data = {};
-    let currentDate = null;
-    let editingIndex = null;
-
-    // 尝试从 localStorage 读取数据，如果没有则使用示例数据
-    function loadData() {
-      const saved = localStorage.getItem("itineraryData");
-      if (saved) {
-        data = JSON.parse(saved);
-      } else {
-        // 示例初始数据
-        data = {
-          "2025-12-04": {
-            itinerary: [
-              { time: "03:01", name: "【客運】 台中 - 桃園 
-", location: "台中火車站" },
-              { time: "07:30-10:35", name: "航班 JX846", location: "台中機場" }
-            ],
-            reminder: "火車站發車 03:01(朝馬+30分)。"
-            reminder: "【航班】JX846 07:30-10:35。"
-          },
-          "2025-12-05": {
-            itinerary: [
-              { time: "", name: "柳川川下り伯舟観光", location: "柳川" },
-              { time: "", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖" }
-            ],
-            reminder: "記得攜帶防曬用品。"
-          }
-        };
-        "2025-12-06": {
-            itinerary: [
-              { time: "", name: "柳川川下り伯舟観光", location: "柳川" },
-              { time: "", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖" }
-            ],
-            reminder: "記得攜帶防曬用品。"
-          }
-        };
-      "2025-12-07": {
-            itinerary: [
-              { time: "", name: "柳川川下り伯舟観光", location: "柳川" },
-              { time: "", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖" }
-            ],
-            reminder: "記得攜帶防曬用品。"
-          }
-        };
-    "2025-12-08": {
-            itinerary: [
-              { time: "", name: "柳川川下り伯舟観光", location: "柳川" },
-              { time: "", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖" }
-            ],
-            reminder: "記得攜帶防曬用品。"
-          }
-        };
-    "2025-12-09": {
-            itinerary: [
-              { time: "", name: "柳川川下り伯舟観光", location: "柳川" },
-              { time: "", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖" }
-            ],
-            reminder: "【航班】JX847 11:45-13:25。"
-       reminder: "【客運/高鐵】 桃園 - 台中。"
-          }
-        };
-       localStorage.setItem("itineraryData", JSON.stringify(data));
-      }
-    }
-    
-    function saveData() {
-      localStorage.setItem("itineraryData", JSON.stringify(data));
-    }
-
-    function loadDates() {
-      dateListDiv.innerHTML = "";
-      Object.keys(data).forEach(date => {
-        const btn = document.createElement("button");
-        btn.textContent = date;
-        if (date === currentDate) btn.classList.add("active");
-        btn.addEventListener("click", () => {
-          currentDate = date;
-          refreshUI();
-        });
-        dateListDiv.appendChild(btn);
-      });
-    }
-
-    function refreshUI() {
-      loadDates();
-      if (!currentDate) {
-        dateTitle.textContent = "请选择日期";
-        itineraryDiv.innerHTML = "";
-        reminderDiv.textContent = "";
-        return;
-      }
-      dateTitle.textContent = currentDate;
-      itineraryDiv.innerHTML = "";
-      reminderDiv.textContent = "";
-
-      const dayData = data[currentDate];
-      if (!dayData) return;
-      
-      dayData.itinerary.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.classList.add("item");
-
-        const text = (item.time ? `[${item.time}] ` : "") + item.name + " - ";
-        const locLink = document.createElement("a");
-        locLink.classList.add("location-link");
-        locLink.textContent = item.location;
-        locLink.href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(item.location)}`;
-        locLink.target = "_blank";
-
-        const editBtn = document.createElement("button");
-        editBtn.classList.add("btn");
-        editBtn.textContent = "编辑";
-        editBtn.addEventListener("click", () => {
-          openForm("编辑行程", item, index);
-        });
-
-        const delBtn = document.createElement("button");
-        delBtn.classList.add("btn");
-        delBtn.textContent = "删除";
-        delBtn.addEventListener("click", () => {
-          if (confirm("确认删除这条行程吗？")) {
-            dayData.itinerary.splice(index, 1);
-            saveData();
-            refreshUI();
-          }
-        });
-
-        div.appendChild(document.createTextNode(text));
-        div.appendChild(locLink);
-        div.appendChild(editBtn);
-        div.appendChild(delBtn);
-
-        itineraryDiv.appendChild(div);
-      });
-
-      if (dayData.reminder) {
-        reminderDiv.textContent = "提醒：" + dayData.reminder;
-      }
-    }
-
-    function openForm(title, item=null, index=null) {
-      formTitle.textContent = title;
-      if (item) {
-        timeInput.value = item.time;
-        nameInput.value = item.name;
-        locationInput.value = item.location;
-        editingIndex = index;
-      } else {
-        timeInput.value = "";
-        nameInput.value = "";
-        locationInput.value = "";
-        editingIndex = null;
-      }
-      formOverlay.style.display = "flex";
-    }
-
-    function closeForm() {
-      formOverlay.style.display = "none";
-      editingIndex = null;
-    }
-
-    saveBtn.addEventListener("click", () => {
-      const time = timeInput.value.trim();
-      const name = nameInput.value.trim();
-      const location = locationInput.value.trim();
-      if (!name || !location) {
-        alert("名称和地点不能为空");
-        return;
-      }
-      if (!currentDate) {
-        alert("请先选择日期");
-        return;
-      }
-      if (!data[currentDate]) {
-        data[currentDate] = { itinerary: [], reminder: ""};
-      }
-      if (editingIndex !== null) {
-        // 修改
-        data[currentDate].itinerary[editingIndex] = { time, name, location };
-      } else {
-        // 新增
-        data[currentDate].itinerary.push({ time, name, location });
-      }
-      saveData();
-      closeForm();
-      refreshUI();
-    });
-
-    cancelBtn.addEventListener("click", () => {
-      closeForm();
-    });
-
-    addBtn.addEventListener("click", () => {
-      if (!currentDate) {
-        alert("请先选择日期");
-        return;
-      }
-      openForm("新增行程");
-    });
-
-    // 初始化
-    loadData();
-    currentDate = Object.keys(data)[0] || null;
-    refreshUI();
-  </script>
-
-</body>
-</html>
+    const
