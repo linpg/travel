@@ -31,7 +31,7 @@
   <div id="dateList"></div>
 
   <div id="details">
-    <h2 id="dateTitle">请选择日期</h2>
+    <h2 id="dateTitle">請選擇日期</h2>
     <div id="itinerary"></div>
     <button id="addBtn">新增行程</button>
     <div id="reminder"></div>
@@ -41,14 +41,14 @@
   <div id="formOverlay">
     <div id="formBox">
       <h3 id="formTitle">新增行程</h3>
-      <label for="timeInput">时间</label>
+      <label for="timeInput">時間</label>
       <input type="text" id="timeInput" placeholder="例如 07:30-10:35" />
 
       <label for="nameInput">名称</label>
-      <input type="text" id="nameInput" placeholder="行程名称或活动" />
+      <input type="text" id="nameInput" placeholder="行程名稱或活動" />
 
-      <label for="locationInput">地点</label>
-      <input type="text" id="locationInput" placeholder="地点地址" />
+      <label for="locationInput">地點</label>
+      <input type="text" id="locationInput" placeholder="地點地址" />
 
       <button id="saveBtn">保存</button>
       <button id="cancelBtn" style="margin-left: 10px;">取消</button>
@@ -84,10 +84,12 @@
         data = {
           "2025-12-04": {
             itinerary: [
-              { time: "03:01", name: "火車站發車", location: "台中火車站" },
+              { time: "03:01", name: "【客運】 台中 - 桃園 
+", location: "台中火車站" },
               { time: "07:30-10:35", name: "航班 JX846", location: "台中機場" }
             ],
-            reminder: "搭乘火車請提前30分鐘到站。"
+            reminder: "火車站發車 03:01(朝馬+30分)。"
+            reminder: "【航班】JX846 07:30-10:35。"
           },
           "2025-12-05": {
             itinerary: [
@@ -95,6 +97,39 @@
               { time: "", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖" }
             ],
             reminder: "記得攜帶防曬用品。"
+          }
+        };
+        "2025-12-06": {
+            itinerary: [
+              { time: "", name: "柳川川下り伯舟観光", location: "柳川" },
+              { time: "", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖" }
+            ],
+            reminder: "記得攜帶防曬用品。"
+          }
+        };
+      "2025-12-07": {
+            itinerary: [
+              { time: "", name: "柳川川下り伯舟観光", location: "柳川" },
+              { time: "", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖" }
+            ],
+            reminder: "記得攜帶防曬用品。"
+          }
+        };
+    "2025-12-08": {
+            itinerary: [
+              { time: "", name: "柳川川下り伯舟観光", location: "柳川" },
+              { time: "", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖" }
+            ],
+            reminder: "記得攜帶防曬用品。"
+          }
+        };
+    "2025-12-09": {
+            itinerary: [
+              { time: "", name: "柳川川下り伯舟観光", location: "柳川" },
+              { time: "", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖" }
+            ],
+            reminder: "【航班】JX847 11:45-13:25。"
+       reminder: "【客運/高鐵】 桃園 - 台中。"
           }
         };
        localStorage.setItem("itineraryData", JSON.stringify(data));
