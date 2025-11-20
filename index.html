@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>行程整合示范</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; display: flex; height: 100vh; }
+    #dateList { width: 150px; border-right: 1px solid #ddd; padding: 10px; box-sizing: border-box; overflow-y: auto; }
+    #dateList button { display: block; width: 100%; padding: 8px; margin-bottom: 5px; border: none; background: #f0f0f0; cursor: pointer; }
+    #dateList button.active { background: #4285f4; color: white; }
+    #details { flex-grow: 1; padding: 20px; }
+    h2 { margin-top: 0; }
+    .item { margin-bottom: 10px; }
+    .location-link { color: #4285f4; cursor: pointer; text-decoration: underline; }
+    #reminder { margin-top: 20px; padding: 10px; background: #fff3cd; border: 1px solid #ffeeba; color: #856404; }
+  </style>
+</head>
+<body>
+
+  <div id="dateList"></div>
+
+  <div id="details">
+    <h2 id="dateTitle">请选择日期</h2>
+    <div id="itinerary"></div>
+    <div id="reminder"></div>
+  </div>
+
+  <script>
+    const data = {
+      "2025-12-04": {
+        itinerary: [
+          { time: "03:01", name: "火車站發車", location: "台中火車站" },
+          { time: "07:30-10:35", name: "航班 JX846", location: "台中機場" },
+          { time: "地點", name: "熊本耶誕市集", location: "花畑廣場" }
+        ],
+        reminder: "搭乘火車請提前30分鐘到站。"
+      },
+      "2025-12-05": {
+        itinerary: [
+          { time: "", name: "柳川川下り伯舟観光", location: "柳川" },
+          { time: "", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖" },
+          { time: "", name: "串燒(雞)皮屋 警固店", location: "福岡市" }
+        ],
+        reminder: "記得攜帶防曬用品。"
+      }
+      // 你可以继续补充更多日期数据
+    };
+
+    const dateListDiv = document.getElementById("dateList");
+    const dateTitle = document.getElementById("dateTitle");
+    const itineraryDiv = document.getElementById("itinerary");
+    const reminderDiv = document.getElementById("reminder");
+
+    function loadDates() {
+      Object.keys(data).forEach(date => {
+        const btn = document.createElement("button");
+        btn.textContent = date;
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("#dateList button").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          showDetails(date);
+        });
+        dateListDiv.appendChild(btn);
+      });
+    }
+
+    function showDetails(date) {
+      dateTitle.textContent = date;
+      itineraryDiv.innerHTML = "";
+      reminderDiv.textContent = "";
+
+      const dayData = data[date];
+      if (!dayData) {
+        itineraryDiv.textContent = "无行程数据。";
+        return;
+      }
+
+      dayData.itinerary.forEach(item => {
+        const div = document.createElement("div");
+        div.classList.add("item");
+        let text = item.time ? `[${item.time}] ` : "";
+        text += `${item.name} - `;
+        const locLink = document.createElement("a");
+        locLink.classList.add("location-link");
+        locLink.textContent = item.location;
+        locLink.href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(item.location)}`;
+        locLink.target = "_blank";
+        div.appendChild(document.createTextNode(text));
+        div.appendChild(locLink);
+        itineraryDiv.appendChild(div);
+      });
+
+      reminderDiv.textContent = dayData.reminder ? `提醒：${dayData.reminder}` : "";
+    }
+
+    loadDates();
+  </script>
+
+</body>
+</html>
