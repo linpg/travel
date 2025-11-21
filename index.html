@@ -9,131 +9,133 @@
       margin: 0;
       display: flex;
       height: 100vh;
-      background: radial-gradient(circle at 30% 30%, #eceaec 70%, #e6e9f0 100%);
-      color: #3c315b;
+      background: radial-gradient(circle at 35% 25%, #f5f6f8 80%, #e9edf1 120%);
+      color: #4c4483;
     }
     #dateList {
       width: 220px;
-      background: rgba(255,255,255, 0.88);a
-      backdrop-filter: blur(5px);
-      box-shadow: 3px 0 16px rgba(126,87,194,0.05);
-      padding: 38px 18px 0 18px;
+      background: rgba(244,244,252, 0.94);
+      backdrop-filter: blur(3px);
+      box-shadow: 2px 0 10px rgba(152,137,179,0.07);
+      padding: 36px 14px 0 14px;
       overflow-y: auto;
     }
     #dateList button {
       display: block;
       width: 96%;
-      margin: 0 auto 16px auto;
-      padding: 18px 0;
+      margin: 0 auto 13px auto;
+      padding: 15px 0;
       border: none;
-      border-radius: 18px;
-      font-size: 19px;
-      background: linear-gradient(93deg, #b2ebf2 0%, #7e57c2 95%);
-      color: #fff;
-      font-weight: 900;
-      letter-spacing: 2px;
-      box-shadow: 0 4px 16px rgba(126,87,194,0.09);
+      border-radius: 16px;
+      font-size: 18px;
+      background: linear-gradient(90deg, #ececf3 0%, #cbc9df 100%);
+      color: #595492;
+      font-weight: 800;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 10px rgba(133,120,178,0.07);
       cursor: pointer;
-      transition: background 0.4s, box-shadow 0.2s, color 0.3s, transform 0.1s;
+      transition: background 0.3s, box-shadow 0.2s, color 0.3s, transform 0.1s;
     }
     #dateList button:hover {
-      transform: scale(1.04);
-      background: linear-gradient(100deg, #ff80ab 20%, #7e57c2 90%);
+      transform: scale(1.035);
+      background: linear-gradient(93deg, #dfdded 10%, #a39dca 100%);
+      color: #3c315b;
     }
     #dateList button.active {
-      background: linear-gradient(90deg, #ff80ab 10%, #7e57c2 90%);
-      color: #fffde4;
-      letter-spacing: 2.5px;
-      box-shadow: 0 8px 32px #7e57c288;
+      background: linear-gradient(90deg, #cbc9df 0%, #a39dca 100%);
+      color: #2c2359;
+      font-weight: 900;
+      box-shadow: 0 6px 22px #a39dca11;
     }
     #details {
       flex-grow: 1;
-      padding: 50px 6vw 0 6vw;
-      background: rgba(255,255,255,0.92);
+      padding: 40px 5vw 0 5vw;
+      background: rgba(252,252,254,0.95);
       backdrop-filter: blur(2px);
       overflow-y: auto;
     }
     h2 {
-      margin: 0 0 34px 0;
-      font-size: 34px;
+      margin: 0 0 26px 0;
+      font-size: 32px;
       font-weight: 900;
-      color: #7e57c2;
-      border-bottom: 4px solid #b2ebf2;
-      padding-bottom: 13px;
-      text-shadow: 0 2px 12px #d5cbe6;
+      color: #7e7cb2;
+      border-bottom: 3px solid #dad5ec;
+      padding-bottom: 10px;
+      text-shadow: 0 2px 12px #e6e4f2;
     }
     .item {
-      background: rgba(254,251,255,0.97);
-      margin-bottom: 24px;
-      padding: 19px 34px;
-      border-radius: 22px;
-      box-shadow: 0 6px 32px 0px #b3b0d866;
-      font-size: 20px;
+      background: rgba(250,250,255,0.97);
+      margin-bottom: 17px;
+      padding: 17px 26px;
+      border-radius: 18px;
+      box-shadow: 0 4px 20px 0px #dddaf2;
+      font-size: 18px;
       display: flex;
       font-weight: 500;
       align-items: center;
-      backdrop-filter: blur(2px);
-      border: 1.7px solid #e0e2ff;
-      transition: box-shadow 0.2s;
+      border: 1.2px solid #ececf3;
     }
     .item:hover {
-      box-shadow: 0 8px 44px #b3b0d8cc;
+      box-shadow: 0 7px 36px #cbc9df33;
+      background: #edeafc;
     }
     .info-left {
       flex-grow: 1;
       word-break: break-word;
     }
     .location-link {
-      color: #006ce3;
+      color: #7486b3;
       cursor: pointer;
       text-decoration: underline;
-      margin-left: 12px;
+      margin-left: 9px;
       font-weight: 700;
-      font-size: 19px;
+      font-size: 18px;
       word-break: break-word;
+      transition: color 0.2s;
     }
+    .location-link:hover { color: #222788; }
     #reminder {
-      margin-top: 34px;
-      padding: 20px 36px;
-      background: rgba(255,249,229,0.97);
-      border-left: 10px solid #ffb74d;
-      border-radius: 22px;
-      font-size: 21px;
-      max-width: 800px;
-      box-shadow: 0 9px 38px #ffe5b5bb;
-      color: #795548;
+      margin-top: 23px;
+      padding: 15px 28px;
+      background: rgba(255,255,240,0.98);
+      border-left: 7px solid #b3a6e6;
+      border-radius: 16px;
+      font-size: 19px;
+      max-width: 700px;
+      box-shadow: 0 7px 20px #d3caeb28;
+      color: #5f548a;
       letter-spacing: 1px;
       word-break: break-all;
     }
     ul.reminder-list {
       margin-top: 7px;
       margin-bottom: 0;
-      padding-left: 30px;
+      padding-left: 23px;
     }
     ul.reminder-list li {
-      margin-bottom: 12px;
-      font-size: 20px;
-      line-height: 1.7;
+      margin-bottom: 8px;
+      font-size: 18px;
+      line-height: 1.65;
       font-weight: 600;
-      color: #a67837;
+      color: #786cb4;
     }
     @media(max-width: 680px) {
       body { flex-direction: column; }
       #dateList {
         width: 100%;
-        height: 110px;
+        height: 100px;
         display: flex;
         overflow-x: auto;
-        padding: 13px 2px;
+        padding: 12px 2px;
       }
       #dateList button {
         flex: none;
-        margin: 0 9px 0 9px;
+        margin: 0 6px 0 6px;
         font-size: 15px;
-        padding: 13px 0;
+        padding: 11px 0;
       }
       #details {
-        padding: 19px 2vw;
+        padding: 14px 1vw;
       }
     }
   </style>
@@ -156,17 +158,18 @@
     const itineraryDiv = document.getElementById("itinerary");
     const reminderDiv = document.getElementById("reminder");
 
+    //数据（已修复逗号、空格和格式问题，颜色低饱和度风格）
     const data = {
       "2025-12-04": {
         itinerary: [
- { time: "午餐", name: "高千穂牛レストラン 和", location: "高千穂牛レストラン 和" },
-           { time: "景點", name: "高千穗峽", location: "第1御鹽井停車場" },
-           { time: "景點", name: "天岩戸神社", location: "天岩戶神社專用停車場" },
-           { time: "景點", name: "天安河原", location: "走路" },
+          { time: "午餐", name: "高千穂牛レストラン 和", location: "高千穂牛レストラン 和" },
+          { time: "景點", name: "高千穗峽", location: "第1御鹽井停車場" },
+          { time: "景點", name: "天岩戸神社", location: "天岩戶神社專用停車場" },
+          { time: "景點", name: "天安河原", location: "走路" },
           { time: "逛", name: "GU Kumanan", location: "GU Kumanan" },
           { time: "逛", name: "Uniqloユニクロ 熊南店", location: "Uniqloユニクロ 熊南店" },
           { time: "airbnb 15:00～23:00", name: "airbnb", location: "2-chōme-8-54 Rendaiji, Nishi Ward, Kumamoto, 860-0055 日本" },
-            { time: "逛", name: "熊本耶誕市集 2025", location: "花畑廣場" },
+          { time: "逛", name: "熊本耶誕市集 2025", location: "花畑廣場" },
           { time: "晚餐", name: "タンとハラミ 焼肉いたる", location: "タンとハラミ 焼肉いたる" }
         ],
         reminder: [
@@ -184,17 +187,16 @@
           { time: "逛", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖PREMIUM OUTLETS" },
           { time: "逛Niko and", name: "三井LaLaport 福岡", location: "三井LaLaport 福岡" },
           { time: "明太子麵包", name: "Full full フルフル パンとワイン", location: "Full full フルフル パンとワイン" },
-                 { time: "備1停車Mina+唐吉訶德", name: "Tenjin Coin Park", location: "Tenjin Coin Park" },
-                 { time: "停車Mina", name: "Times", location: "タイムズイオンミーナ天神" },
-                 { time: "停車唐吉訶德", name: "gate's Parking", location: "gate's Parking" },
-                 { time: "3COINS＋PLUS B1F", name: "Mina", location: "走路" },
-                 { time: "唐吉訶德", name: "中洲店", location: "走路"},
-                 { time: "備1停車", name: "Paraca Kego #3", location: "Paraca Kego #3" },
-                 { time: "備2停車", name: "Time", location: "Time Space Kegodai 5 Parking Lot" },
-  { time: "備1晚餐現場排", name: "串燒(雞)皮屋 警固店", location: "かわ屋 警固店" },
-            { time: "備2晚餐現場排", name: "Ibushiza", location: "焼とりいぶし坐" },
-            { time: "Airbnb", name: "amp  flat", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka, 810-0023日本" }
-          
+          { time: "備1停車Mina+唐吉訶德", name: "Tenjin Coin Park", location: "Tenjin Coin Park" },
+          { time: "停車Mina", name: "Times", location: "タイムズイオンミーナ天神" },
+          { time: "停車唐吉訶德", name: "gate's Parking", location: "gate's Parking" },
+          { time: "3COINS＋PLUS B1F", name: "Mina", location: "走路" },
+          { time: "唐吉訶德", name: "中洲店", location: "走路" },
+          { time: "備1停車", name: "Paraca Kego #3", location: "Paraca Kego #3" },
+          { time: "備2停車", name: "Time", location: "Time Space Kegodai 5 Parking Lot" },
+          { time: "備1晚餐現場排", name: "串燒(雞)皮屋 警固店", location: "かわ屋 警固店" },
+          { time: "備2晚餐現場排", name: "Ibushiza", location: "焼とりいぶし坐" },
+          { time: "Airbnb", name: "amp flat", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka, 810-0023日本" }
         ],
         reminder: [
           "記得攜帶泡腳（小毛巾）。",
@@ -204,22 +206,22 @@
       "2025-12-06": {
         itinerary: [
           { time: "備1早餐", name: "McDonald's Yakuin", location: "McDonald's Yakuin" },
-           { time: "備2早餐", name: "SHIROUZU COFFEE 警固店", location: "SHIROUZU COFFEE 警固店" },
-           { time: "景點楓葉", name: "西溪公園", location: "西溪公園" },
-           { time: "免料駐車場蔦屋書店x星巴克", name: "武雄市圖書館·歷史資料館", location: "武雄市圖書館·歷史資料館" },
- { time: "走路景點", name: "武雄神社", location: "武雄神社" },
-           { time: "停車場", name: "Times'", location: "Times24h 'Siebold-No-Yu'" },
-           { time: "走路足湯", name: "足湯 嬉野溫泉湯宿廣場", location: "足湯 嬉野溫泉湯宿廣場" },
-           { time: "走路景點", name: "白鯰魚 豐玉姫神社", location: "白鯰魚 豐玉姫神社" },
-           { time: "走路咖啡廳", name: "蛋糕 うれし庵", location: "蛋糕 うれし庵" },
-           { time: "11:00–15:00免料駐車場", name: "くれよん漢堡之店", location: "くれよん漢堡之店" },
-           { time: "免料駐車場", name: "轟之瀑布", location: "轟之瀑布" },
-                { time: "駐車場", name: "Parking Lot", location: "Yutoku Inari Shrine Parking Lot" },
-                { time: "走路景點", name: "祐德稻荷神社 參道", location: "祐德稻荷神社 參道" },
-                { time: "吃吃喝喝小店", name: "Kashima Natural Farm", location: "Kashima Natural Farm" },
-                { time: "景點", name: "大魚神社海中鳥居", location: "大魚神社海中鳥居" },
-                { time: "免料駐車場", name: "一蘭 太宰府店", location: "一蘭 太宰府店" },
-          { time: "Airbnb", name: "amp  flat", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka, 810-0023日本" }
+          { time: "備2早餐", name: "SHIROUZU COFFEE 警固店", location: "SHIROUZU COFFEE 警固店" },
+          { time: "景點楓葉", name: "西溪公園", location: "西溪公園" },
+          { time: "免料駐車場蔦屋書店x星巴克", name: "武雄市圖書館·歷史資料館", location: "武雄市圖書館·歷史資料館" },
+          { time: "走路景點", name: "武雄神社", location: "武雄神社" },
+          { time: "停車場", name: "Times'", location: "Times24h 'Siebold-No-Yu'" },
+          { time: "走路足湯", name: "足湯 嬉野溫泉湯宿廣場", location: "足湯 嬉野溫泉湯宿廣場" },
+          { time: "走路景點", name: "白鯰魚 豐玉姫神社", location: "白鯰魚 豐玉姫神社" },
+          { time: "走路咖啡廳", name: "蛋糕 うれし庵", location: "蛋糕 うれし庵" },
+          { time: "11:00–15:00免料駐車場", name: "くれよん漢堡之店", location: "くれよん漢堡之店" },
+          { time: "免料駐車場", name: "轟之瀑布", location: "轟之瀑布" },
+          { time: "駐車場", name: "Parking Lot", location: "Yutoku Inari Shrine Parking Lot" },
+          { time: "走路景點", name: "祐德稻荷神社 參道", location: "祐德稻荷神社 參道" },
+          { time: "吃吃喝喝小店", name: "Kashima Natural Farm", location: "Kashima Natural Farm" },
+          { time: "景點", name: "大魚神社海中鳥居", location: "大魚神社海中鳥居" },
+          { time: "免料駐車場", name: "一蘭 太宰府店", location: "一蘭 太宰府店" },
+          { time: "Airbnb", name: "amp flat", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka, 810-0023日本" }
         ],
         reminder: [
           "記得攜帶泡腳（小毛巾）。",
@@ -229,20 +231,20 @@
       "2025-12-07": {
         itinerary: [
           { time: "備1早餐", name: "BREAD＆CAFE", location: "走路" },
-           { time: "備2早餐", name: "SHIROUZU COFFEE 警固店", location: "走路" },
-           { time: "備1停車", name: "Times", location: "Times Moji Minatomachi" },
-           { time: "備2停車", name: "D-Parking 門司港町第1", location: "D-Parking 門司港町第1" },
-           { time: "走路", name: "門司港懷舊區", location: "門司港懷舊區" },
-           { time: "壽司壽司壽司", name: "唐戶市場", location: "唐戶市場" },
-           { time: "走路景點", name: "龜山八幡宮（龜山宮）", location: "龜山八幡宮（龜山宮）" },
-           { time: "走路景點", name: "赤間神宮", location: "赤間神宮" },
-           { time: "冰淇淋", name: "MILKHALL MOJIKO", location: "MILKHALL MOJIKO" },
-           { time: "走路景點", name: "九州鐵道紀念館", location: "九州鐵道紀念館" },
-           { time: "走路景點", name: "門司電氣通訊懷舊館", location: "門司電氣通訊懷舊館" },
-           { time: "景點", name: "皿倉山纜車 山麓站 - 皿倉山展望台", location: "帆柱公園駐車場" },
-           { time: "備1停車", name: "Paraca Kego #3", location: "Paraca Kego #3" },
-           { time: "備2停車", name: "Time Space Kegodai 5 Parking Lot", location: "Time Space Kegodai 5 Parking Lot" },
-           { time: "走路予約ID: XFT63F 20:30", name: "焼肉ベンジャミン", location: "焼肉ベンジャミン" }
+          { time: "備2早餐", name: "SHIROUZU COFFEE 警固店", location: "走路" },
+          { time: "備1停車", name: "Times", location: "Times Moji Minatomachi" },
+          { time: "備2停車", name: "D-Parking 門司港町第1", location: "D-Parking 門司港町第1" },
+          { time: "走路", name: "門司港懷舊區", location: "門司港懷舊區" },
+          { time: "壽司壽司壽司", name: "唐戶市場", location: "唐戶市場" },
+          { time: "走路景點", name: "龜山八幡宮（龜山宮）", location: "龜山八幡宮（龜山宮）" },
+          { time: "走路景點", name: "赤間神宮", location: "赤間神宮" },
+          { time: "冰淇淋", name: "MILKHALL MOJIKO", location: "MILKHALL MOJIKO" },
+          { time: "走路景點", name: "九州鐵道紀念館", location: "九州鐵道紀念館" },
+          { time: "走路景點", name: "門司電氣通訊懷舊館", location: "門司電氣通訊懷舊館" },
+          { time: "景點", name: "皿倉山纜車 山麓站 - 皿倉山展望台", location: "帆柱公園駐車場" },
+          { time: "備1停車", name: "Paraca Kego #3", location: "Paraca Kego #3" },
+          { time: "備2停車", name: "Time Space Kegodai 5 Parking Lot", location: "Time Space Kegodai 5 Parking Lot" },
+          { time: "走路予約ID: XFT63F 20:30", name: "焼肉ベンジャミン", location: "焼肉ベンジャミン" }
         ],
         reminder: [
           "皿倉山纜車下午17:11日落 (現場買票)  19:00 前離開，車程1小30分",
@@ -252,31 +254,31 @@
       "2025-12-08": {
         itinerary: [
           { time: "10:00–20:00明太子麵包", name: "Full full", location: "フルフル パンとワイン" },
-           { time: "11:00", name: "炉端ノいとおかし", location: "炉端ノいとおかし" },
-           { time: "運動現場買票", name: "王貞治棒球紀念館-89公園", location: "王貞治棒球紀念館-89公園" },
-           { time: "駐車場", name: "Parking Lot", location: "Fukuokadaimyo Garden City Parking Lot" },
-           { time: "走路逛", name: "HOKA Fukuoka Tenjin", location: "HOKA Fukuoka Tenjin" },
-           { time: "走路吃", name: "幸福pancake 福岡天神店", location: "幸福pancake 福岡天神店" },
-           { time: "走路逛", name: "ABC-MART", location: "ABC-MART GRANDSTAGE Fukuoka Nishi-dori Store" },
-           { time: "走路逛", name: "HUMAN MADE 福岡", location: "HUMAN MADE 福岡" },
-           { time: "走路逛", name: "大丸 福岡天神店", location: "大丸 福岡天神店" },
-           { time: "走路吃10:00–19:00", name: "I'm donut? 福岡店", location: "I'm donut? 福岡店" },
-           { time: "走路逛", name: "福岡聖誕活動-福岡市政府前交流廣場", location: "福岡市役所西側ふれあい広場" },
-          { time: "airbnb", name: "airbnb", location: "32°48'02.8"N 130°42'07.4"E" }
+          { time: "11:00", name: "炉端ノいとおかし", location: "炉端ノいとおかし" },
+          { time: "運動現場買票", name: "王貞治棒球紀念館-89公園", location: "王貞治棒球紀念館-89公園" },
+          { time: "駐車場", name: "Parking Lot", location: "Fukuokadaimyo Garden City Parking Lot" },
+          { time: "走路逛", name: "HOKA Fukuoka Tenjin", location: "HOKA Fukuoka Tenjin" },
+          { time: "走路吃", name: "幸福pancake 福岡天神店", location: "幸福pancake 福岡天神店" },
+          { time: "走路逛", name: "ABC-MART", location: "ABC-MART GRANDSTAGE Fukuoka Nishi-dori Store" },
+          { time: "走路逛", name: "HUMAN MADE 福岡", location: "HUMAN MADE 福岡" },
+          { time: "走路逛", name: "大丸 福岡天神店", location: "大丸 福岡天神店" },
+          { time: "走路吃10:00–19:00", name: "I'm donut? 福岡店", location: "I'm donut? 福岡店" },
+          { time: "走路逛", name: "福岡聖誕活動-福岡市政府前交流廣場", location: "福岡市役所西側ふれあい広場" },
+          { time: "airbnb", name: "airbnb", location: "32°48'02.8\"N 130°42'07.4\"E" }
         ],
-        reminder: [ "炉端ノいとおかし預約ID YHZMLD 入座時間為50分鐘",
-                  "20:30離開回熊本，23:00後將不再接受入住申請，房號603 住戶代碼18807201"
-                  ]
+        reminder: [
+          "炉端ノいとおかし預約ID YHZMLD 入座時間為50分鐘",
+          "20:30離開回熊本，23:00後將不再接受入住申請，房號603 住戶代碼18807201"
+        ]
       },
       "2025-12-09": {
         itinerary: [
           { time: "11:45-13:25", name: "航班 JX847", location: "バジェット･レンタカー 熊本空港店" }
-        
         ],
-        reminder: [ 
+        reminder: [
           "路程+還車 1小時。",
-          "【航班】JX847 11:45-13:25" 
-                  ]
+          "【航班】JX847 11:45-13:25"
+        ]
       }
     };
 
