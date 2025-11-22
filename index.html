@@ -2,179 +2,426 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>九洲行程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>九州行程助手</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
+    :root {
+      --primary-color: #6366f1; /* 現代藍紫色 */
+      --primary-light: #e0e7ff;
+      --bg-color: #f3f4f6;
+      --card-bg: #ffffff;
+      --text-main: #1f2937;
+      --text-sub: #6b7280;
+      --accent-color: #f59e0b; /* 提醒事項顏色 */
+      --sidebar-width: 260px;
+    }
+
     body {
-      font-family: "Segoe UI", Arial, Helvetica, "微軟正黑體", sans-serif;
+      font-family: 'Roboto', 'Noto Sans TC', sans-serif;
       margin: 0;
       display: flex;
       height: 100vh;
-      background: radial-gradient(circle at 35% 25%, #f5f6f8 80%, #e9edf1 120%);
-      color: #4c4483;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      overflow: hidden;
     }
+
+    /* --- 左側/頂部日期選單 --- */
     #dateList {
-      width: 220px;
-      background: rgba(244,244,252, 0.94);
-      backdrop-filter: blur(3px);
-      box-shadow: 2px 0 10px rgba(152,137,179,0.07);
-      padding: 36px 14px 0 14px;
+      width: var(--sidebar-width);
+      background: #ffffff;
+      border-right: 1px solid #e5e7eb;
+      padding: 20px;
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 10;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.03);
     }
+
+    .app-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      padding-left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     #dateList button {
-      display: block;
-      width: 96%;
-      margin: 0 auto 13px auto;
-      padding: 15px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 16px 20px;
       border: none;
-      border-radius: 16px;
-      font-size: 18px;
-      background: linear-gradient(90deg, #ececf3 0%, #cbc9df 100%);
-      color: #595492;
-      font-weight: 800;
-      letter-spacing: 1px;
-      box-shadow: 0 2px 10px rgba(133,120,178,0.07);
+      border-radius: 12px;
+      font-size: 16px;
+      background: transparent;
+      color: var(--text-sub);
+      font-weight: 500;
       cursor: pointer;
-      transition: background 0.3s, box-shadow 0.2s, color 0.3s, transform 0.1s;
+      transition: all 0.2s ease;
+      text-align: left;
     }
+
     #dateList button:hover {
-      transform: scale(1.035);
-      background: linear-gradient(93deg, #dfdded 10%, #a39dca 100%);
-      color: #3c315b;
+      background: var(--bg-color);
+      color: var(--primary-color);
     }
+
     #dateList button.active {
-      background: linear-gradient(90deg, #cbc9df 0%, #a39dca 100%);
-      color: #2c2359;
-      font-weight: 900;
-      box-shadow: 0 6px 22px #a39dca11;
+      background: var(--primary-color);
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
+    
+    #dateList button .weekday {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    /* --- 右側內容區 --- */
     #details {
       flex-grow: 1;
-      padding: 40px 5vw 0 5vw;
-      background: rgba(252,252,254,0.95);
-      backdrop-filter: blur(2px);
+      padding: 0;
       overflow-y: auto;
+      position: relative;
     }
-    h2 {
-      margin: 0 0 26px 0;
-      font-size: 32px;
-      font-weight: 900;
-      color: #7e7cb2;
-      border-bottom: 3px solid #dad5ec;
-      padding-bottom: 10px;
-      text-shadow: 0 2px 12px #e6e4f2;
-    }
-    .item {
-      background: rgba(250,250,255,0.97);
-      margin-bottom: 17px;
-      padding: 17px 26px;
-      border-radius: 18px;
-      box-shadow: 0 4px 20px 0px #dddaf2;
-      font-size: 18px;
+
+    header.detail-header {
+      position: sticky;
+      top: 0;
+      background: rgba(243, 244, 246, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 20px 40px;
+      z-index: 5;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
       display: flex;
-      font-weight: 500;
       align-items: center;
-      border: 1.2px solid #ececf3;
+      justify-content: space-between;
     }
-    .item:hover {
-      box-shadow: 0 7px 36px #cbc9df33;
-      background: #edeafc;
+
+    h2#dateTitle {
+      margin: 0;
+      font-size: 28px;
+      color: var(--text-main);
     }
-    .info-left {
-      flex-grow: 1;
-      word-break: break-word;
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 40px 100px 40px;
     }
-    .location-link {
-      color: #7486b3;
-      cursor: pointer;
-      text-decoration: underline;
-      margin-left: 9px;
-      font-weight: 700;
-      font-size: 18px;
-      word-break: break-word;
-      transition: color 0.2s;
+
+    /* --- 行程卡片樣式 --- */
+    .timeline {
+      position: relative;
+      padding-left: 20px;
     }
-    .location-link:hover { color: #222788; }
-    #reminder {
-      margin-top: 23px;
-      padding: 15px 28px;
-      background: rgba(255,255,240,0.98);
-      border-left: 7px solid #b3a6e6;
+
+    /* 左側時間軸線 */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      background: #e5e7eb;
+      border-radius: 2px;
+    }
+
+    .item {
+      background: var(--card-bg);
+      margin-bottom: 20px;
+      padding: 20px;
       border-radius: 16px;
-      font-size: 19px;
-      max-width: 700px;
-      box-shadow: 0 7px 20px #d3caeb28;
-      color: #5f548a;
-      letter-spacing: 1px;
-      word-break: break-all;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 1px solid transparent;
+      position: relative;
+      animation: fadeIn 0.4s ease forwards;
     }
+
+    .item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      border-color: var(--primary-light);
+    }
+
+    /* 時間軸圓點 */
+    .item::before {
+      content: '';
+      position: absolute;
+      left: -25px; /* 對齊 timeline 線 */
+      top: 25px;
+      width: 12px;
+      height: 12px;
+      background: var(--primary-color);
+      border: 3px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+
+    .time-badge {
+      background: var(--primary-light);
+      color: var(--primary-color);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      min-width: 80px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .info-content {
+      flex-grow: 1;
+    }
+
+    .info-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .info-location {
+      font-size: 14px;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 導航按鈕 */
+    .nav-btn {
+      background: #f3f4f6;
+      color: var(--text-sub);
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: scale(1.1);
+    }
+
+    /* --- 提醒事項區塊 --- */
+    #reminder {
+      margin-top: 40px;
+      background: #fffbeb; /* 淡淡的黃色背景 */
+      border: 1px solid #fcd34d;
+      border-radius: 16px;
+      padding: 25px;
+      position: relative;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    #reminder h3 {
+      margin: 0 0 15px 0;
+      color: #b45309;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+    }
+
     ul.reminder-list {
-      margin-top: 7px;
-      margin-bottom: 0;
-      padding-left: 23px;
+      margin: 0;
+      padding-left: 20px;
+      color: #92400e;
     }
+
     ul.reminder-list li {
       margin-bottom: 8px;
-      font-size: 18px;
-      line-height: 1.65;
-      font-weight: 600;
-      color: #786cb4;
+      line-height: 1.6;
     }
-    @media(max-width: 680px) {
-      body { flex-direction: column; }
+
+    /* --- 手機版 RWD --- */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
       #dateList {
         width: 100%;
-        height: 100px;
-        display: flex;
+        height: auto;
+        flex-direction: row;
         overflow-x: auto;
-        padding: 12px 2px;
+        padding: 15px;
+        box-sizing: border-box;
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+        white-space: nowrap;
+        background: #fff;
+        flex-shrink: 0;
       }
+      
+      .app-title {
+        display: none; /* 手機版隱藏標題以節省空間 */
+      }
+
       #dateList button {
-        flex: none;
-        margin: 0 6px 0 6px;
-        font-size: 15px;
-        padding: 11px 0;
+        width: auto;
+        padding: 10px 20px;
+        display: inline-flex;
+        flex-direction: column; /* 日期和星期垂直排列 */
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        margin-right: 10px;
+        border-radius: 20px; /* 膠囊狀 */
       }
-      #details {
-        padding: 14px 1vw;
+      
+      #dateList button .weekday {
+        font-size: 12px;
       }
+
+      header.detail-header {
+        padding: 15px 20px;
+      }
+      
+      h2#dateTitle {
+        font-size: 20px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .item {
+        flex-direction: column;
+        padding: 15px;
+        gap: 10px;
+      }
+      
+      .timeline::before {
+        left: -10px; /* 手機版線條稍微左移 */
+      }
+      
+      .item::before {
+        left: -35px; /* 圓點跟著左移 */
+        width: 10px;
+        height: 10px;
+      }
+
+      .timeline {
+        padding-left: 30px; /* 給圓點留空間 */
+      }
+
+      .time-badge {
+        align-self: flex-start;
+        padding: 4px 10px;
+        font-size: 13px;
+      }
+
+      .nav-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+      }
+      
+      .info-name {
+        padding-right: 40px; /* 避免文字蓋到導航按鈕 */
+        font-size: 17px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* 滾動條美化 */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #9ca3af;
     }
   </style>
 </head>
 <body>
-  <div id="dateList"></div>
+  
+  <div id="dateList">
+    <div class="app-title"><i class="fa-solid fa-plane-departure"></i> 九洲之旅</div>
+    </div>
+
   <div id="details">
-    <h2 id="dateTitle">請選擇日期</h2>
-    <div id="itinerary"></div>
-    <div id="reminder"></div>
+    <header class="detail-header">
+      <h2 id="dateTitle">請選擇日期</h2>
+    </header>
+    
+    <div class="container">
+      <div id="itinerary" class="timeline"></div>
+      <div id="reminder"></div>
+    </div>
   </div>
+
   <script>
     const allDates = [
       "2025-12-04", "2025-12-05", "2025-12-06",
       "2025-12-07", "2025-12-08", "2025-12-09"
     ];
     let currentDate = null;
+
     const dateListDiv = document.getElementById("dateList");
     const dateTitle = document.getElementById("dateTitle");
     const itineraryDiv = document.getElementById("itinerary");
     const reminderDiv = document.getElementById("reminder");
 
-    //数据（已修复逗号、空格和格式问题，颜色低饱和度风格）
+    // 完整的行程資料 (Data)
     const data = {
       "2025-12-04": {
         itinerary: [
-          { time: "午餐11:00〜14:30", name: "高千穂牛レストラン 和", location: "高千穂牛レストラン 和" },
+          { time: "11:00", name: "午餐 - 高千穂牛レストラン 和", location: "高千穂牛レストラン 和" },
           { time: "景點", name: "高千穗峽", location: "第1御鹽井停車場" },
           { time: "景點", name: "天岩戸神社", location: "天岩戶神社專用停車場" },
           { time: "景點", name: "天安河原", location: "走路" },
-          { time: "景點門票100日元免費停車場", name: "白川水源", location: "白川水源" },
-          { time: "逛10:00–20:00", name: "GU Kumanan", location: "GU Kumanan" },
-          { time: "逛10:00–20:00", name: "Uniqloユニクロ 熊南店", location: "Uniqloユニクロ 熊南店" },
-          { time: "airbnb 15:00-23:00", name: "airbnb", location: "2-chōme-8-54 Rendaiji, Nishi Ward, Kumamoto, 860-0055 日本" },
-          { time: "逛16:00-22：00", name: "熊本耶誕市集2025", location: "花畑廣場" },
+          { time: "景點", name: "白川水源 (門票100円/免費停車)", location: "白川水源" },
+          { time: "10:00", name: "逛街 - GU Kumanan", location: "GU Kumanan" },
+          { time: "10:00", name: "逛街 - Uniqlo 熊南店", location: "Uniqloユニクロ 熊南店" },
+          { time: "15:00", name: "Airbnb Check-in", location: "2-chōme-8-54 Rendaiji, Nishi Ward, Kumamoto, 860-0055 日本" },
+          { time: "16:00", name: "熊本耶誕市集 2025", location: "花畑廣場" },
           { time: "晚餐", name: "タンとハラミ 焼肉いたる", location: "タンとハラミ 焼肉いたる" }
         ],
         reminder: [
-          "【客運】台中 - 桃園 火車站發車 03:01(朝馬+30分)",
+          "【客運】台中 - 桃園 火車站發車 03:01 (朝馬+30分)",
           "【航班】JX846 07:30-10:35",
           "【BUDGET租賃】 預約號碼 : 00009540394"
         ]
@@ -182,159 +429,221 @@
       "2025-12-05": {
         itinerary: [
           { time: "早餐", name: "McDonald's", location: "McDonald's Kumamoto Heisei Oodori" },
-          { time: "遊船10:50", name: "柳川川下り伯舟観光", location: "KAMENOI HOTEL YANAGAWA" },
-          { time: "走路去泡腳", name: "The Karatachi Bunjin (Writers) Footbath", location: "The Karatachi Bunjin (Writers) Footbath" },
-          { time: "午餐11:00–15:00", name: "平價海鮮.定食 夜明茶屋", location: "平價海鮮.定食 夜明茶屋" },
-          { time: "逛", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖PREMIUM OUTLETS" },
-          { time: "逛Niko and", name: "三井LaLaport 福岡", location: "三井LaLaport 福岡" },
-          { time: "明太子麵包10:00–20:00", name: "Full full", location: "Full full フルフル パンとワイン" },
-          { time: "備1停車Mina+唐吉訶德", name: "Tenjin Coin Park", location: "Tenjin Coin Park" },
-          { time: "停車Mina", name: "Times", location: "タイムズイオンミーナ天神" },
-          { time: "停車唐吉訶德", name: "gate's Parking", location: "gate's Parking" },
-          { time: "3COINS＋PLUS B1F", name: "Mina", location: "走路" },
-          { time: "唐吉訶德", name: "中洲店", location: "走路" },
-          { time: "Airbnb", name: "amp flat", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka, 810-0023日本" },
-          { time: "備1停車", name: "Paraca Kego #3", location: "Paraca Kego #3" },
-          { time: "備2停車", name: "Time", location: "2 Chome-12-18 Kego, Chuo Ward, Fukuoka, 810-0023日本" },
-          { time: "備1晚餐現場排17:00–23:30", name: "串燒(雞)皮屋 警固店", location: "かわ屋 警固店" },
-          { time: "備2晚餐現場排17:00–00:00", name: "Ibushiza", location: "焼とりいぶし坐" }
+          { time: "10:50", name: "遊船 - 柳川川下り伯舟観光", location: "KAMENOI HOTEL YANAGAWA" },
+          { time: "散步", name: "The Karatachi Bunjin Footbath (去泡腳)", location: "The Karatachi Bunjin (Writers) Footbath" },
+          { time: "11:00", name: "午餐 - 平價海鮮定食 夜明茶屋", location: "平價海鮮.定食 夜明茶屋" },
+          { time: "購物", name: "鳥栖 PREMIUM OUTLETS", location: "鳥栖PREMIUM OUTLETS" },
+          { time: "購物", name: "三井 LaLaport 福岡 (逛 Niko and)", location: "三井LaLaport 福岡" },
+          { time: "10:00", name: "Full full 明太子麵包", location: "Full full フルフル パンとワイン" },
+          { time: "停車", name: "Tenjin Coin Park (Mina+唐吉訶德)", location: "Tenjin Coin Park" },
+          { time: "停車", name: "Times (Mina)", location: "タイムズイオンミーナ天神" },
+          { time: "停車", name: "gate's Parking (唐吉訶德)", location: "gate's Parking" },
+          { time: "逛街", name: "3COINS＋PLUS B1F (Mina)", location: "走路" },
+          { time: "逛街", name: "唐吉訶德 中洲店", location: "走路" },
+          { time: "住宿", name: "Airbnb - amp flat", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka, 810-0023日本" },
+          { time: "停車", name: "備案1: Paraca Kego #3", location: "Paraca Kego #3" },
+          { time: "停車", name: "備案2: Time", location: "2 Chome-12-18 Kego, Chuo Ward, Fukuoka, 810-0023日本" },
+          { time: "17:00", name: "晚餐備案1 - 串燒(雞)皮屋 警固店", location: "かわ屋 警固店" },
+          { time: "17:00", name: "晚餐備案2 - Ibushiza", location: "焼とりいぶし坐" }
         ],
         reminder: [
-          "記得攜帶泡腳（小毛巾）。",
-          "遊船上午11:00預約時間前5分鐘抵達「龜之井飯店柳川」的大廳。"
+          "記得攜帶泡腳用的小毛巾。",
+          "遊船：請於上午 11:00 預約時間前 5 分鐘抵達「龜之井飯店柳川」大廳。"
         ]
       },
       "2025-12-06": {
         itinerary: [
-          { time: "備1早餐24小時", name: "McDonald's", location: "マクドナルド 薬院店" },
-          { time: "備2早餐08:00–00:00", name: "SHIROUZU COFFEE 警固店", location: "SHIROUZU COFFEE 警固店" },
-          { time: "景點楓葉24小時", name: "西溪公園", location: "西渓公園" },
-          { time: "免料駐車場蔦屋書店x星巴克09:00–21:00", name: "武雄市圖書館·歷史資料館", location: "武雄市圖書館·歷史資料館" },
-          { time: "走路景點09:00–12:00/13:00–17:00", name: "武雄神社", location: "武雄神社" },
-          { time: "停車場", name: "Times'", location: "Times24h 'Siebold-No-Yu'" },
-          { time: "走路足湯08:00–23:00", name: "足湯 嬉野溫泉湯宿廣場", location: "嬉野温泉 湯宿広場" },
-          { time: "走路景點", name: "白鯰魚 豐玉姫神社", location: "豊玉姫神社" },
-          { time: "走路咖啡廳10:00–18:00", name: "蛋糕 うれし庵", location: "うれし庵" },
-          { time: "11:00–15:00免料駐車場", name: "くれよん漢堡之店", location: "くれよん漢堡之店" },
-          { time: "免料駐車場", name: "轟之瀑布", location: "Hei-163-1 Ureshinomachi Oaza Shimojuku, Ureshino, Saga 843-0304日本" },
-          { time: "駐車場", name: "Parking Lot", location: "Yutoku Inari Shrine Parking Lot" },
-          { time: "走路景點", name: "祐德稻荷神社 參道", location: "祐德稻荷神社 參道" },
-          { time: "蕎麥麵甜點和咖啡館10:00 - 18:00", name: "Kashima Natural Farm", location: "そば粉のスイーツ製造所Tora&Shika（かしま自然農園）" },
+          { time: "早餐", name: "McDonald's 24hr", location: "マクドナルド 薬院店" },
+          { time: "08:00", name: "SHIROUZU COFFEE 警固店", location: "SHIROUZU COFFEE 警固店" },
+          { time: "景點", name: "西溪公園 (楓葉)", location: "西渓公園" },
+          { time: "09:00", name: "武雄市圖書館·歷史資料館 (免費停車/蔦屋書店)", location: "武雄市圖書館·歷史資料館" },
+          { time: "09:00", name: "武雄神社", location: "武雄神社" },
+          { time: "停車", name: "Times' Siebold-No-Yu", location: "Times24h 'Siebold-No-Yu'" },
+          { time: "08:00", name: "嬉野溫泉 湯宿廣場 (足湯)", location: "嬉野温泉 湯宿広場" },
+          { time: "景點", name: "白鯰魚 豐玉姫神社", location: "豊玉姫神社" },
+          { time: "10:00", name: "うれし庵 (蛋糕)", location: "うれし庵" },
+          { time: "11:00", name: "くれよん漢堡之店", location: "くれよん漢堡之店" },
+          { time: "景點", name: "轟之瀑布 (免費停車)", location: "Hei-163-1 Ureshinomachi Oaza Shimojuku, Ureshino, Saga 843-0304日本" },
+          { time: "停車", name: "祐德稻荷神社 停車場", location: "Yutoku Inari Shrine Parking Lot" },
+          { time: "景點", name: "祐德稻荷神社 參道", location: "祐德稻荷神社 參道" },
+          { time: "10:00", name: "Kashima Natural Farm (蕎麥麵甜點)", location: "そば粉のスイーツ製造所Tora&Shika（かしま自然農園）" },
           { time: "景點", name: "大魚神社海中鳥居", location: "大魚神社海中鳥居" },
-          { time: "免料駐車場", name: "一蘭 太宰府店", location: "3 Chome-1-30 Mukaizano, Dazaifu, Fukuoka 818-0135日本" },
-          { time: "備1停車", name: "Paraca Kego #3", location: "Paraca Kego #3" },
-          { time: "備2停車", name: "Time", location: "2 Chome-12-18 Kego, Chuo Ward, Fukuoka, 810-0023日本" },
-          { time: "Airbnb", name: "amp flat", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka, 810-0023日本" }
+          { time: "晚餐", name: "一蘭 太宰府店", location: "3 Chome-1-30 Mukaizano, Dazaifu, Fukuoka 818-0135日本" },
+          { time: "住宿", name: "Airbnb - amp flat", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka, 810-0023日本" }
         ],
         reminder: [
-          "記得攜帶泡腳（小毛巾）。",
-          "くれよん漢堡之店雖然濃釉醬汁不錯，但咖哩醬更是好吃到爆。"
+          "記得攜帶泡腳小毛巾。",
+          "くれよん漢堡之店：雖然濃釉醬汁不錯，但咖哩醬更是好吃到爆。"
         ]
       },
       "2025-12-07": {
         itinerary: [
-          { time: "備1早餐08:00–20:30", name: "BREAD＆CAFE", location: "走路" },
-          { time: "備2早餐08:00–00:00", name: "SHIROUZU COFFEE 警固店", location: "走路" },
-          { time: "備1停車", name: "Times", location: "Times Moji Minatomachi" },
-          { time: "備2停車", name: "D-Parking 門司港町第1", location: "D-Parking 門司港町第1" },
-          { time: "走路", name: "門司港懷舊區", location: "門司港懷舊區" },
-          { time: "壽司壽司壽司08:00–15:00", name: "唐戶市場", location: "下関 唐戸市場" },
-          { time: "走路景點", name: "龜山八幡宮（龜山宮）", location: "龜山八幡宮（龜山宮）" },
-          { time: "走路景點", name: "赤間神宮", location: "赤間神宮" },
-          { time: "冰淇淋", name: "MILKHALL MOJIKO", location: "MILKHALL MOJIKO" },
-          { time: "走路景點", name: "九州鐵道紀念館", location: "九州鐵道紀念館" },
-          { time: "走路景點", name: "門司電氣通訊懷舊館", location: "門司電氣通訊懷舊館" },
-          { time: "景點", name: "皿倉山纜車 山麓站 - 皿倉山展望台", location: "帆柱公園駐車場" },
-          { time: "備1停車", name: "Paraca Kego #3", location: "Paraca Kego #3" },
-          { time: "備2停車", name: "Time Space Kegodai 5 Parking Lot", location: "Time Space Kegodai 5 Parking Lot" },
-          { time: "走路予約ID: XFT63F 20:30", name: "焼肉ベンジャミン", location: "焼肉ベンジャミン" }
+          { time: "08:00", name: "早餐備案1: BREAD＆CAFE", location: "走路" },
+          { time: "08:00", name: "早餐備案2: SHIROUZU COFFEE", location: "走路" },
+          { time: "停車", name: "Times Moji Minatomachi", location: "Times Moji Minatomachi" },
+          { time: "停車", name: "D-Parking 門司港町第1", location: "D-Parking 門司港町第1" },
+          { time: "景點", name: "門司港懷舊區", location: "門司港懷舊區" },
+          { time: "08:00", name: "唐戶市場 (壽司！)", location: "下関 唐戸市場" },
+          { time: "景點", name: "龜山八幡宮", location: "龜山八幡宮（龜山宮）" },
+          { time: "景點", name: "赤間神宮", location: "赤間神宮" },
+          { time: "點心", name: "MILKHALL MOJIKO (冰淇淋)", location: "MILKHALL MOJIKO" },
+          { time: "景點", name: "九州鐵道紀念館", location: "九州鐵道紀念館" },
+          { time: "景點", name: "門司電氣通訊懷舊館", location: "門司電氣通訊懷舊館" },
+          { time: "景點", name: "皿倉山纜車 & 展望台", location: "帆柱公園駐車場" },
+          { time: "20:30", name: "晚餐 - 焼肉ベンジャミン (預約ID: XFT63F)", location: "焼肉ベンジャミン" }
         ],
         reminder: [
-          "皿倉山纜車下午17:11日落 (現場買票)  19:00 前離開，車程1小30分",
-          "焼肉ベンジャミン予約ID: XFT63F 20:30"
+          "皿倉山纜車：下午 17:11 日落 (現場買票)。",
+          "請於 19:00 前離開，車程約 1 小時 30 分。",
+          "晚餐預約：焼肉ベンジャミン ID: XFT63F 20:30"
         ]
       },
       "2025-12-08": {
         itinerary: [
-          { time: "明太子麵包10:00–20:00", name: "Full full", location: "フルフル パンとワイン" },
-          { time: "午餐11:00", name: "炉端ノいとおかし", location: "炉端ノいとおかし" },
-          { time: "運動現場買票", name: "王貞治棒球紀念館-89公園", location: "王貞治棒球紀念館-89公園" },
-          { time: "駐車場", name: "Parking Lot", location: "Fukuokadaimyo Garden City Parking Lot" },
-          { time: "走路逛", name: "HOKA Fukuoka Tenjin", location: "HOKA Fukuoka Tenjin" },
-          { time: "走路吃", name: "幸福pancake 福岡天神店", location: "幸福pancake 福岡天神店" },
-          { time: "走路逛", name: "ABC-MART", location: "ABC-MART GRANDSTAGE Fukuoka Nishi-dori Store" },
-          { time: "走路逛", name: "HUMAN MADE 福岡", location: "HUMAN MADE 福岡" },
-          { time: "走路逛", name: "大丸 福岡天神店", location: "大丸 福岡天神店" },
-          { time: "走路吃10:00–19:00", name: "I'm donut? 福岡店", location: "I'm donut? 福岡店" },
-          { time: "走路逛", name: "福岡聖誕活動-福岡市政府前交流廣場", location: "福岡市役所西側ふれあい広場" },
-          { time: "airbnb", name: "airbnb", location: "32.800778, 130.702056" },
-          { time: "駐車場", name: "Times Sakuramachi #4", location: "タイムズ桜町第４" }
+          { time: "10:00", name: "Full full 明太子麵包", location: "フルフル パンとワイン" },
+          { time: "11:00", name: "午餐 - 炉端ノいとおかし", location: "炉端ノいとおかし" },
+          { time: "景點", name: "王貞治棒球紀念館 - 89公園", location: "王貞治棒球紀念館-89公園" },
+          { time: "停車", name: "Garden City Parking", location: "Fukuokadaimyo Garden City Parking Lot" },
+          { time: "逛街", name: "HOKA Fukuoka Tenjin", location: "HOKA Fukuoka Tenjin" },
+          { time: "甜點", name: "幸福pancake 福岡天神店", location: "幸福pancake 福岡天神店" },
+          { time: "逛街", name: "ABC-MART Grandstage", location: "ABC-MART GRANDSTAGE Fukuoka Nishi-dori Store" },
+          { time: "逛街", name: "HUMAN MADE 福岡", location: "HUMAN MADE 福岡" },
+          { time: "逛街", name: "大丸 福岡天神店", location: "大丸 福岡天神店" },
+          { time: "點心", name: "I'm donut? 福岡店", location: "I'm donut? 福岡店" },
+          { time: "活動", name: "福岡聖誕活動", location: "福岡市役所西側ふれあい広場" },
+          { time: "住宿", name: "Airbnb 熊本", location: "32.800778, 130.702056" },
+          { time: "停車", name: "Times Sakuramachi #4", location: "タイムズ桜町第４" }
         ],
         reminder: [
-          "炉端ノいとおかし預約ID YHZMLD 入座時間為50分鐘",
-          "20:30離開回熊本，23:00後將不再接受入住申請，房號603 住戶代碼18807201"
+          "炉端ノいとおかし：預約 ID YHZMLD，入座時間限制 50 分鐘。",
+          "20:30 離開回熊本。",
+          "23:00 後不再接受入住。房號 603，住戶代碼 18807201"
         ]
       },
       "2025-12-09": {
         itinerary: [
-          { time: "11:45-13:25", name: "航班 JX847", location: "バジェット･レンタカー 熊本空港店" }
+          { time: "11:45", name: "航班 JX847 (回程)", location: "バジェット･レンタカー 熊本空港店" }
         ],
         reminder: [
-          "路程+還車 1小時。",
+          "路程 + 還車預留 1 小時。",
           "【航班】JX847 11:45-13:25"
         ]
       }
     };
 
+    // 輔助函式：取得星期幾
+    function getWeekDay(dateString) {
+      const days = ["週日", "週一", "週二", "週三", "週四", "週五", "週六"];
+      const date = new Date(dateString);
+      return days[date.getDay()];
+    }
+
+    // 輔助函式：優化 Google Maps 連結
+    function getMapLink(locationName) {
+      if (locationName === "走路" || !locationName) return "#";
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationName)}`;
+    }
+
     function loadDates() {
-      dateListDiv.innerHTML = "";
+      dateListDiv.innerHTML = '<div class="app-title"><i class="fa-solid fa-plane-departure"></i> 九州之旅</div>';
       allDates.forEach(date => {
         const btn = document.createElement("button");
-        btn.textContent = date;
+        const weekDay = getWeekDay(date);
+        
+        // 分割日期字串以便排版 (如 12-04)
+        const displayDate = date.substring(5); 
+
+        btn.innerHTML = `<span>${displayDate}</span><span class="weekday">${weekDay}</span>`;
+        
         if (date === currentDate) btn.classList.add("active");
+        
         btn.addEventListener("click", () => {
           currentDate = date;
+          // 移除其他 active class
+          document.querySelectorAll('#dateList button').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
           refreshUI();
+          // 手機版點擊後自動捲動到內容
+          if(window.innerWidth < 768) {
+             window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
         });
         dateListDiv.appendChild(btn);
       });
     }
 
     function refreshUI() {
-      loadDates();
       if (!currentDate) {
         dateTitle.textContent = "請選擇日期";
         itineraryDiv.innerHTML = "";
         reminderDiv.innerHTML = "";
         return;
       }
-      dateTitle.textContent = currentDate;
+      
+      const weekDay = getWeekDay(currentDate);
+      dateTitle.innerHTML = `${currentDate} <span style="font-size:0.6em; color:#6b7280; font-weight:normal; margin-left:10px;">${weekDay}</span>`;
+      
       itineraryDiv.innerHTML = "";
       reminderDiv.innerHTML = "";
 
       const dayData = data[currentDate];
+
       if (!dayData || dayData.itinerary.length === 0) {
-        itineraryDiv.innerHTML = `<div style="font-size:19px; color:#888; margin:32px 0;">尚未設定行程。</div>`;
+        itineraryDiv.innerHTML = `<div style="text-align:center; color:#9ca3af; margin-top:50px;">本日無行程</div>`;
       } else {
-        dayData.itinerary.forEach(item => {
+        dayData.itinerary.forEach((item, index) => {
           const div = document.createElement("div");
           div.classList.add("item");
-          div.innerHTML =
-            `<span class="info-left">${item.time ? `[${item.time}] ` : ""}${item.name} - <a class="location-link" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(item.location)}" target="_blank">${item.location}</a></span>`;
+          div.style.animationDelay = `${index * 0.05}s`; // 瀑布流動畫
+
+          // 判斷是否為「走路」行程，若是則不顯示導航按鈕或顯示不同圖示
+          const isWalking = item.location === "走路";
+          const mapUrl = getMapLink(item.location);
+          
+          // 處理時間顯示
+          let timeDisplay = item.time || "";
+          // 移除原數據中可能包含的文字，只保留純粹的時間或簡短標籤，或是直接顯示
+          
+          div.innerHTML = `
+            <div class="time-badge">
+              <i class="fa-regular fa-clock"></i> ${timeDisplay}
+            </div>
+            <div class="info-content">
+              <div class="info-name">${item.name}</div>
+              <div class="info-location">
+                <i class="fa-solid fa-location-dot"></i> ${item.location}
+              </div>
+            </div>
+            ${!isWalking ? `
+              <a class="nav-btn" href="${mapUrl}" target="_blank" title="開啟 Google Maps">
+                <i class="fa-solid fa-diamond-turn-right"></i>
+              </a>
+            ` : ''}
+          `;
           itineraryDiv.appendChild(div);
         });
       }
+
       if (dayData.reminder && dayData.reminder.length > 0) {
-        reminderDiv.innerHTML =
-          `<div style="font-weight:700;">提醒：</div><ul class="reminder-list">${
-            dayData.reminder.map(r => `<li>${r}</li>`).join("")
-          }</ul>`;
-      } else {
-        reminderDiv.innerHTML = "";
+        reminderDiv.innerHTML = `
+          <h3><i class="fa-solid fa-triangle-exclamation"></i> 行程提醒</h3>
+          <ul class="reminder-list">
+            ${dayData.reminder.map(r => `<li>${r}</li>`).join("")}
+          </ul>
+        `;
       }
     }
+
+    // 初始化
     currentDate = allDates[0];
+    loadDates(); // 先建立按鈕
+    
+    // 手動設定第一個按鈕為 active (因為 loadDates 會重繪)
+    const firstBtn = dateListDiv.querySelectorAll('button')[0];
+    if(firstBtn) firstBtn.classList.add('active');
+    
     refreshUI();
+
   </script>
 </body>
 </html>
