@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>九州行程助手</title>
+  <title>九州行程助手 (可編輯版)</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -13,7 +13,8 @@
       --card-bg: #ffffff;
       --text-main: #333333;
       --text-sub: #666666;
-      --time-bg: #ececf3;
+      --danger-color: #ff6b6b;
+      --success-color: #51cf66;
     }
 
     body {
@@ -23,7 +24,7 @@
       height: 100vh;
       background-color: var(--bg-color);
       color: var(--text-main);
-      overflow: hidden; /* 防止整個頁面滾動，讓內部滾動 */
+      overflow: hidden;
     }
 
     /* --- 左側/上方 日期選單 --- */
@@ -37,6 +38,7 @@
       overflow-y: auto;
       z-index: 10;
       flex-shrink: 0;
+      position: relative;
     }
 
     #dateList button {
@@ -72,6 +74,14 @@
         opacity: 0.8;
     }
 
+    .btn-reset {
+        margin-top: auto;
+        background-color: #ffecec !important;
+        color: var(--danger-color) !important;
+        justify-content: center !important;
+        font-size: 14px !important;
+    }
+
     /* --- 右側 詳細內容區 --- */
     #details {
       flex-grow: 1;
@@ -84,7 +94,7 @@
     .content-container {
       max-width: 800px;
       margin: 0 auto;
-      padding: 40px 20px 80px 20px;
+      padding: 40px 20px 100px 20px; /* 底部留白給懸浮按鈕 */
     }
 
     h2 {
@@ -112,9 +122,10 @@
       padding: 16px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       display: flex;
-      align-items: stretch; /* 讓左右等高 */
+      align-items: stretch;
       border: 1px solid rgba(0,0,0,0.03);
       transition: transform 0.2s;
+      position: relative; /* For absolute positioning of edit buttons */
     }
 
     .card:hover {
@@ -122,9 +133,35 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     }
 
+    /* 卡片操作區 (編輯/刪除) */
+    .card-tools {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: none; /* 預設隱藏，hover顯示 */
+        gap: 8px;
+    }
+    .card:hover .card-tools {
+        display: flex;
+    }
+    .btn-tool {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+    .btn-edit { background: #e3f2fd; color: #1976d2; }
+    .btn-delete { background: #ffebee; color: #d32f2f; }
+    
     /* 左側：時間區塊 */
     .card-time {
-      flex: 0 0 90px; /* 固定寬度，避免跑版 */
+      flex: 0 0 90px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -138,11 +175,7 @@
       line-height: 1.4;
     }
     
-    .card-time span {
-        display: block;
-    }
-    
-    .tag-event { font-size: 12px; color: #999; font-weight: normal; margin-bottom: 4px; }
+    .card-time span { display: block; }
 
     /* 中間：資訊區塊 */
     .card-info {
@@ -150,6 +183,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      padding-right: 40px; /* 留位置給工具按鈕 */
     }
 
     .card-title {
@@ -203,6 +237,18 @@
       padding: 20px;
       border-radius: 8px;
       color: #6d5c00;
+      position: relative;
+    }
+
+    .reminder-edit-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: transparent;
+        border: none;
+        color: #bfa026;
+        cursor: pointer;
+        font-size: 16px;
     }
 
     #reminder h3 {
@@ -224,12 +270,75 @@
       font-size: 16px;
     }
 
+    /* --- 懸浮新增按鈕 (FAB) --- */
+    .fab-add {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 4px 15px rgba(95, 84, 138, 0.4);
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s;
+        z-index: 100;
+    }
+    .fab-add:hover {
+        transform: scale(1.1);
+        background-color: var(--accent-color);
+    }
+
+    /* --- Modal 彈窗 --- */
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .modal-overlay.open {
+        visibility: visible;
+        opacity: 1;
+    }
+    .modal-box {
+        background: white;
+        width: 90%;
+        max-width: 500px;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .modal-header { font-size: 20px; font-weight: bold; margin-bottom: 16px; color: var(--primary-color); }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+    .form-group input, .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .btn-cancel { background: #eee; color: #333; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+    .btn-save { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+
     /* --- 手機版響應式調整 --- */
     @media(max-width: 768px) {
-      body {
-        flex-direction: column;
-      }
-
+      body { flex-direction: column; }
       #dateList {
         width: 100%;
         height: auto;
@@ -237,12 +346,10 @@
         overflow-x: auto;
         padding: 12px 10px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        /* 隱藏滾動條但保留功能 */
         -ms-overflow-style: none; 
         scrollbar-width: none;
       }
       #dateList::-webkit-scrollbar { display: none; }
-
       #dateList button {
         flex: 0 0 auto;
         margin: 0 6px;
@@ -251,29 +358,25 @@
         border-radius: 20px;
         font-size: 14px;
       }
-
-      #dateList button .day-label { display: none; } /* 手機版只顯示日期 */
-
-      .content-container {
-        padding: 20px 15px;
-      }
-
-      .card {
-        padding: 12px;
-      }
-
-      .card-time {
-        flex: 0 0 75px;
-        font-size: 13px;
-        margin-right: 12px;
-        padding-right: 12px;
-      }
-
-      .card-title {
-        font-size: 16px;
-      }
+      #dateList button .day-label { display: none; }
       
-      h2 { font-size: 22px; }
+      .btn-reset { display: none; } /* 手機版為了美觀暫時隱藏重置按鈕，或可移至底部 */
+
+      .content-container { padding: 20px 15px 80px 15px; }
+      .card { padding: 12px; }
+      /* 手機版讓工具列直接顯示，方便操作 */
+      .card-tools { display: flex; position: relative; top: 0; right: 0; justify-content: flex-end; margin-bottom: 8px; }
+      .card { flex-direction: column; }
+      .card-time { 
+          border-right: none; border-bottom: 1px solid #f0f0f0; 
+          margin-right: 0; margin-bottom: 8px; padding-bottom: 8px; 
+          flex: auto; text-align: left;
+      }
+      .card-info { padding-right: 0; }
+      .card-action { display: none; } /* 手機版隱藏地圖按鈕圖示，直接點卡片標題連結 */
+      
+      /* 改讓標題變成可點擊的地圖連結 */
+      .card-title a { color: inherit; text-decoration: none; border-bottom: 1px dotted #999; }
     }
   </style>
 </head>
@@ -289,213 +392,199 @@
     </div>
   </div>
 
+  <button class="fab-add" onclick="openModal()"><i class="fas fa-plus"></i></button>
+
+  <div class="modal-overlay" id="itemModal">
+      <div class="modal-box">
+          <div class="modal-header" id="modalHeader">新增行程</div>
+          <div class="form-group">
+              <label>時間 (例如: 10:00-12:00)</label>
+              <input type="text" id="inputTime" placeholder="輸入時間或註解">
+          </div>
+          <div class="form-group">
+              <label>名稱 (地點/餐廳名)</label>
+              <input type="text" id="inputName" placeholder="輸入行程名稱">
+          </div>
+          <div class="form-group">
+              <label>地址/定位 (用於導航)</label>
+              <input type="text" id="inputLocation" placeholder="輸入用於 Google Maps 的地址">
+          </div>
+          <div class="modal-actions">
+              <button class="btn-cancel" onclick="closeModal()">取消</button>
+              <button class="btn-save" onclick="saveItem()">儲存</button>
+          </div>
+      </div>
+  </div>
+
+  <div class="modal-overlay" id="reminderModal">
+      <div class="modal-box">
+          <div class="modal-header">編輯本日提醒</div>
+          <div class="form-group">
+              <label>提醒事項 (一行一個)</label>
+              <textarea id="inputReminder" placeholder="請輸入提醒事項，換行區隔..."></textarea>
+          </div>
+          <div class="modal-actions">
+              <button class="btn-cancel" onclick="closeReminderModal()">取消</button>
+              <button class="btn-save" onclick="saveReminder()">儲存</button>
+          </div>
+      </div>
+  </div>
+
   <script>
+    // === 1. 預設資料 (若沒有儲存紀錄時使用) ===
+    const defaultData = {
+      "2025-12-04": {
+        itinerary: [
+          { time: "午餐 11:00〜14:30", name: "高千穂牛レストラン 和", location: "高千穂牛レストラン 和" },
+          { time: "景點", name: "高千穗峽", location: "第1御鹽井停車場" },
+          { time: "入住 15:00-23:00", name: "Airbnb", location: "2-chōme-8-54 Rendaiji, Nishi Ward, Kumamoto" }
+        ],
+        reminder: [ "【航班】JX846 07:30-10:35", "【BUDGET租賃】 預約號碼 : 00009540394" ]
+      },
+      "2025-12-05": {
+        itinerary: [
+          { time: "遊船 10:50", name: "柳川川下り伯舟観光", location: "KAMENOI HOTEL YANAGAWA" },
+          { time: "逛", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖PREMIUM OUTLETS" },
+          { time: "入住", name: "Airbnb (amp flat)", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka" }
+        ],
+        reminder: [ "記得攜帶泡腳用的小毛巾。", "遊船：上午11:00預約，請前5分鐘抵達。" ]
+      },
+      "2025-12-06": {
+        itinerary: [
+          { time: "景點 24H", name: "西溪公園 (楓葉)", location: "西渓公園" },
+          { time: "書店 09:00–21:00", name: "武雄市圖書館", location: "武雄市圖書館" },
+          { time: "晚餐", name: "一蘭 太宰府店", location: "3 Chome-1-30 Mukaizano, Dazaifu" }
+        ],
+        reminder: [ "武雄圖書館：內部禁止拍照，請留意。" ]
+      }
+    };
+
+    // 完整的日期清單
     const allDates = [
       "2025-12-04", "2025-12-05", "2025-12-06",
       "2025-12-07", "2025-12-08", "2025-12-09"
     ];
-    
-    // 簡單的日期轉星期幾 Helper
+
+    // === 全域變數 ===
+    let appData = {};
+    let currentDate = null;
+    let editingIndex = -1; // -1 代表新增，其他數字代表編輯第幾個項目
+
+    // === DOM 元素 ===
+    const dateListDiv = document.getElementById("dateList");
+    const dateTitle = document.getElementById("dateTitle");
+    const itineraryDiv = document.getElementById("itinerary");
+    const reminderDiv = document.getElementById("reminder");
+    const itemModal = document.getElementById("itemModal");
+    const reminderModal = document.getElementById("reminderModal");
+
+    // === Helper: 日期轉星期 ===
     function getDayLabel(dateString) {
         const days = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
         const d = new Date(dateString);
         return days[d.getDay()];
     }
 
-    let currentDate = null;
-    const dateListDiv = document.getElementById("dateList");
-    const dateTitle = document.getElementById("dateTitle");
-    const itineraryDiv = document.getElementById("itinerary");
-    const reminderDiv = document.getElementById("reminder");
+    // === 2. 初始化與資料讀取 ===
+    function init() {
+        // 嘗試從 localStorage 讀取
+        const saved = localStorage.getItem('kyushu_trip_data');
+        if (saved) {
+            appData = JSON.parse(saved);
+            // 檢查是否有遺漏的日期key，若有則補上空結構
+            allDates.forEach(date => {
+                if(!appData[date]) appData[date] = { itinerary: [], reminder: [] };
+            });
+        } else {
+            // 如果沒存過，使用預設資料，並補齊其他日期
+            appData = JSON.parse(JSON.stringify(defaultData));
+            allDates.forEach(date => {
+                if(!appData[date]) appData[date] = { itinerary: [], reminder: [] };
+            });
+        }
+        
+        currentDate = allDates[0];
+        renderDateList();
+        renderContent();
+    }
 
-    // 資料
-    const data = {
-      "2025-12-04": {
-        itinerary: [
-          { time: "午餐 11:00〜14:30", name: "高千穂牛レストラン 和", location: "高千穂牛レストラン 和" },
-          { time: "景點", name: "高千穗峽", location: "第1御鹽井停車場" },
-          { time: "景點", name: "天岩戸神社", location: "天岩戶神社專用停車場" },
-          { time: "景點", name: "天安河原", location: "走路" },
-          { time: "景點 (門票100¥)", name: "白川水源", location: "白川水源" },
-          { time: "逛 10:00–20:00", name: "GU Kumanan", location: "GU Kumanan" },
-          { time: "逛 10:00–20:00", name: "Uniqlo 熊南店", location: "Uniqloユニクロ 熊南店" },
-          { time: "入住 15:00-23:00", name: "Airbnb", location: "2-chōme-8-54 Rendaiji, Nishi Ward, Kumamoto" },
-          { time: "逛 16:00-22:00", name: "熊本耶誕市集2025", location: "花畑廣場" },
-          { time: "晚餐", name: "タンとハラミ 焼肉いたる", location: "タンとハラミ 焼肉いたる" }
-        ],
-        reminder: [
-          "【客運】台中 - 桃園 火車站發車 03:01 (朝馬+30分)",
-          "【航班】JX846 07:30-10:35",
-          "【BUDGET租賃】 預約號碼 : 00009540394"
-        ]
-      },
-      "2025-12-05": {
-        itinerary: [
-          { time: "早餐", name: "McDonald's", location: "McDonald's Kumamoto Heisei Oodori" },
-          { time: "遊船 10:50", name: "柳川川下り伯舟観光", location: "KAMENOI HOTEL YANAGAWA" },
-          { time: "走路去泡腳", name: "The Karatachi Bunjin Footbath", location: "The Karatachi Bunjin (Writers) Footbath" },
-          { time: "午餐 11:00–15:00", name: "平價海鮮.定食 夜明茶屋", location: "平價海鮮.定食 夜明茶屋" },
-          { time: "逛", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖PREMIUM OUTLETS" },
-          { time: "逛 Niko and", name: "三井LaLaport 福岡", location: "三井LaLaport 福岡" },
-          { time: "麵包 10:00–20:00", name: "Full full 明太子麵包", location: "Full full フルフル パンとワイン" },
-          { time: "停車", name: "Tenjin Coin Park (Mina+唐吉訶德)", location: "Tenjin Coin Park" },
-          { time: "停車 (Mina)", name: "Times", location: "タイムズイオンミーナ天神" },
-          { time: "停車 (唐吉訶德)", name: "gate's Parking", location: "gate's Parking" },
-          { time: "3COINS＋PLUS B1F", name: "Mina", location: "走路" },
-          { time: "逛", name: "唐吉訶德 中洲店", location: "走路" },
-          { time: "入住", name: "Airbnb (amp flat)", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka" },
-          { time: "備1停車", name: "Paraca Kego #3", location: "Paraca Kego #3" },
-          { time: "備2停車", name: "Time", location: "2 Chome-12-18 Kego, Chuo Ward, Fukuoka" },
-          { time: "備1晚餐 17:00–23:30", name: "串燒(雞)皮屋 警固店", location: "かわ屋 警固店" },
-          { time: "備2晚餐 17:00–00:00", name: "Ibushiza", location: "焼とりいぶし坐" }
-        ],
-        reminder: [
-          "記得攜帶泡腳用的小毛巾。",
-          "遊船：上午11:00預約，請前5分鐘抵達「龜之井飯店柳川」大廳。"
-        ]
-      },
-      "2025-12-06": {
-        itinerary: [
-          { time: "備1早餐 24H", name: "McDonald's", location: "マクドナルド 薬院店" },
-          { time: "備2早餐 08:00–00:00", name: "SHIROUZU COFFEE 警固店", location: "SHIROUZU COFFEE 警固店" },
-          { time: "景點 24H", name: "西溪公園 (楓葉)", location: "西渓公園" },
-          { time: "書店 09:00–21:00", name: "武雄市圖書館 (免料駐車場)", location: "武雄市圖書館·歷史資料館" },
-          { time: "景點 09:00–17:00", name: "武雄神社", location: "武雄神社" },
-          { time: "停車場", name: "Times'", location: "Times24h 'Siebold-No-Yu'" },
-          { time: "足湯 08:00–23:00", name: "嬉野溫泉湯宿廣場", location: "嬉野温泉 湯宿広場" },
-          { time: "景點", name: "白鯰魚 豐玉姫神社", location: "豊玉姫神社" },
-          { time: "咖啡 10:00–18:00", name: "蛋糕 うれし庵", location: "うれし庵" },
-          { time: "午餐 11:00–15:00", name: "くれよん漢堡之店", location: "くれよん漢堡之店" },
-          { time: "景點", name: "轟之瀑布 (免料駐車場)", location: "Hei-163-1 Ureshinomachi Oaza Shimojuku" },
-          { time: "停車場", name: "祐德稻荷神社 停車場", location: "Yutoku Inari Shrine Parking Lot" },
-          { time: "景點", name: "祐德稻荷神社 參道", location: "祐德稻荷神社 參道" },
-          { time: "甜點 10:00-18:00", name: "Kashima Natural Farm", location: "そば粉のスイーツ製造所Tora&Shika" },
-          { time: "景點", name: "大魚神社 海中鳥居", location: "大魚神社海中鳥居" },
-          { time: "晚餐", name: "一蘭 太宰府店", location: "3 Chome-1-30 Mukaizano, Dazaifu" },
-          { time: "入住", name: "Airbnb", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka" }
-        ],
-        reminder: [
-          "記得攜帶泡腳小毛巾。",
-          "くれよん漢堡之店：咖哩醬非常好吃，推薦嘗試。"
-        ]
-      },
-      "2025-12-07": {
-        itinerary: [
-          { time: "早餐 08:00–20:30", name: "BREAD＆CAFE", location: "BREAD＆CAFE" },
-          { time: "早餐 08:00–00:00", name: "SHIROUZU COFFEE", location: "SHIROUZU COFFEE 警固店" },
-          { time: "備1停車", name: "Times", location: "Times Moji Minatomachi" },
-          { time: "備2停車", name: "D-Parking 門司港町第1", location: "D-Parking 門司港町第1" },
-          { time: "景點", name: "門司港懷舊區", location: "門司港懷舊區" },
-          { time: "午餐 08:00–15:00", name: "唐戶市場 (壽司)", location: "下関 唐戸市場" },
-          { time: "景點", name: "龜山八幡宮", location: "龜山八幡宮（龜山宮）" },
-          { time: "景點", name: "赤間神宮", location: "赤間神宮" },
-          { time: "點心", name: "MILKHALL MOJIKO (冰淇淋)", location: "MILKHALL MOJIKO" },
-          { time: "景點", name: "九州鐵道紀念館", location: "九州鐵道紀念館" },
-          { time: "景點", name: "門司電氣通訊懷舊館", location: "門司電氣通訊懷舊館" },
-          { time: "景點", name: "皿倉山纜車 & 展望台", location: "帆柱公園駐車場" },
-          { time: "晚餐 20:30", name: "焼肉ベンジャミン (預約制)", location: "焼肉ベンジャミン" }
-        ],
-        reminder: [
-          "皿倉山纜車：下午17:11日落 (現場買票)，19:00 前離開，回程車程約1.5小時。",
-          "晚餐予約ID: XFT63F (20:30)"
-        ]
-      },
-      "2025-12-08": {
-        itinerary: [
-          { time: "麵包 10:00–20:00", name: "Full full", location: "フルフル パンとワイン" },
-          { time: "午餐 11:00", name: "炉端ノいとおかし", location: "炉端ノいとおかし" },
-          { time: "景點 (現場票)", name: "王貞治棒球紀念館-89公園", location: "王貞治棒球紀念館-89公園" },
-          { time: "停車場", name: "Parking Lot", location: "Fukuokadaimyo Garden City Parking Lot" },
-          { time: "逛", name: "HOKA Fukuoka Tenjin", location: "HOKA Fukuoka Tenjin" },
-          { time: "吃", name: "幸福pancake 福岡天神店", location: "幸福pancake 福岡天神店" },
-          { time: "逛", name: "ABC-MART Grandstage", location: "ABC-MART GRANDSTAGE Fukuoka Nishi-dori Store" },
-          { time: "逛", name: "HUMAN MADE 福岡", location: "HUMAN MADE 福岡" },
-          { time: "逛", name: "大丸 福岡天神店", location: "大丸 福岡天神店" },
-          { time: "吃 10:00–19:00", name: "I'm donut? 福岡店", location: "I'm donut? 福岡店" },
-          { time: "活動", name: "福岡聖誕活動", location: "福岡市役所西側ふれあい広場" },
-          { time: "入住", name: "Airbnb (熊本)", location: "32.800778, 130.702056" },
-          { time: "停車場", name: "Times Sakuramachi #4", location: "タイムズ桜町第４" }
-        ],
-        reminder: [
-          "炉端ノいとおかし：預約ID YHZMLD，入座時間為50分鐘。",
-          "20:30 離開回熊本，23:00後不再接受入住。",
-          "房號 603，住戶代碼 18807201"
-        ]
-      },
-      "2025-12-09": {
-        itinerary: [
-          { time: "11:45-13:25", name: "航班 JX847 (返程)", location: "バジェット･レンタカー 熊本空港店" }
-        ],
-        reminder: [
-          "路程 + 還車預留 1 小時。",
-          "【航班】JX847 11:45-13:25"
-        ]
-      }
-    };
+    function saveDataToStorage() {
+        localStorage.setItem('kyushu_trip_data', JSON.stringify(appData));
+    }
 
-    function loadDates() {
+    function resetData() {
+        if(confirm("確定要重置所有資料嗎？您的修改將會消失。")) {
+            localStorage.removeItem('kyushu_trip_data');
+            location.reload();
+        }
+    }
+
+    // === 3. 畫面渲染 ===
+    function renderDateList() {
       dateListDiv.innerHTML = "";
       allDates.forEach(date => {
         const dayLabel = getDayLabel(date);
         const btn = document.createElement("button");
-        // 格式化日期顯示，讓它更好讀
         const shortDate = date.substring(5).replace('-', '/');
         btn.innerHTML = `<span>${shortDate}</span> <span class="day-label">${dayLabel}</span>`;
         
         if (date === currentDate) btn.classList.add("active");
         
         btn.addEventListener("click", () => {
-          // 移除舊的 active
-          const currentActive = dateListDiv.querySelector('.active');
-          if(currentActive) currentActive.classList.remove('active');
-          // 加上新的 active
+          document.querySelector('#dateList button.active')?.classList.remove('active');
           btn.classList.add('active');
-          
           currentDate = date;
-          refreshUI();
-          
-          // 手機版點擊後自動捲動到該按鈕位置
+          renderContent();
           if (window.innerWidth <= 768) {
               btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
           }
         });
         dateListDiv.appendChild(btn);
       });
+
+      // 加入重置按鈕
+      const resetBtn = document.createElement("button");
+      resetBtn.className = "btn-reset";
+      resetBtn.innerHTML = '<i class="fas fa-undo"></i> 重置資料';
+      resetBtn.onclick = resetData;
+      dateListDiv.appendChild(resetBtn);
     }
 
-    function refreshUI() {
-      if (!currentDate) {
-        dateTitle.querySelector('span').textContent = "請選擇日期";
-        itineraryDiv.innerHTML = "";
-        reminderDiv.innerHTML = "";
-        return;
-      }
+    function renderContent() {
+      if (!currentDate) return;
+      
+      // 更新標題
       dateTitle.querySelector('span').textContent = `${currentDate} (${getDayLabel(currentDate)})`;
+      
+      // 清空目前內容
       itineraryDiv.innerHTML = "";
       reminderDiv.innerHTML = "";
 
-      const dayData = data[currentDate];
+      const dayData = appData[currentDate];
       
-      if (!dayData || dayData.itinerary.length === 0) {
-        itineraryDiv.innerHTML = `<div style="font-size:18px; color:#888; padding:20px; text-align:center;">本日無行程。</div>`;
+      // 渲染行程卡片
+      if (dayData.itinerary.length === 0) {
+        itineraryDiv.innerHTML = `<div style="font-size:16px; color:#aaa; padding:30px; text-align:center; border: 2px dashed #ddd; border-radius:12px;">點擊右下角 + 新增行程</div>`;
       } else {
-        dayData.itinerary.forEach(item => {
+        dayData.itinerary.forEach((item, index) => {
           const card = document.createElement("div");
           card.classList.add("card");
           
-          // 處理時間顯示：把文字中的 "午餐" 等標籤稍微分開，或者直接顯示
-          // 這裡使用正則表達式簡單判斷如果是單純時間或是有文字
-          let timeHtml = item.time;
-          
-          // 產生Google Maps連結 (使用 Universal Link 格式，手機會自動開 App)
+          // Google Map Link
           const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.location)}`;
           
           card.innerHTML = `
+            <div class="card-tools">
+                <button class="btn-tool btn-edit" onclick="editItem(${index})"><i class="fas fa-pen"></i></button>
+                <button class="btn-tool btn-delete" onclick="deleteItem(${index})"><i class="fas fa-trash"></i></button>
+            </div>
             <div class="card-time">
-               ${timeHtml}
+               ${item.time}
             </div>
             <div class="card-info">
-              <div class="card-title">${item.name}</div>
+              <div class="card-title">
+                ${window.innerWidth <= 768 ? `<a href="${mapLink}" target="_blank">${item.name}</a>` : item.name}
+              </div>
               <div class="card-location">
                 <i class="fas fa-map-marker-alt"></i> ${item.location}
               </div>
@@ -510,22 +599,103 @@
         });
       }
 
+      // 渲染提醒事項
+      let reminderHtml = `
+          <button class="reminder-edit-btn" onclick="openReminderModal()"><i class="fas fa-edit"></i> 編輯提醒</button>
+          <h3><i class="fas fa-exclamation-circle"></i> 重要提醒</h3>
+      `;
+      
       if (dayData.reminder && dayData.reminder.length > 0) {
-        reminderDiv.innerHTML = `
-            <h3><i class="fas fa-exclamation-circle"></i> 重要提醒</h3>
-            <ul class="reminder-list">
-                ${dayData.reminder.map(r => `<li>${r}</li>`).join("")}
-            </ul>
-        `;
+        reminderHtml += `<ul class="reminder-list">${dayData.reminder.map(r => `<li>${r}</li>`).join("")}</ul>`;
       } else {
-        reminderDiv.style.display = 'none';
+        reminderHtml += `<div style="color:#998a4b; font-size:14px; font-style:italic;">尚無提醒事項</div>`;
       }
+      reminderDiv.innerHTML = reminderHtml;
     }
 
-    // 初始化
-    currentDate = allDates[0];
-    loadDates();
-    refreshUI();
+    // === 4. 新增/修改/刪除 行程邏輯 ===
+
+    function openModal() {
+        // 新增模式
+        editingIndex = -1;
+        document.getElementById('modalHeader').textContent = "新增行程";
+        document.getElementById('inputTime').value = "";
+        document.getElementById('inputName').value = "";
+        document.getElementById('inputLocation').value = "";
+        itemModal.classList.add('open');
+    }
+
+    function editItem(index) {
+        // 編輯模式
+        editingIndex = index;
+        const item = appData[currentDate].itinerary[index];
+        document.getElementById('modalHeader').textContent = "編輯行程";
+        document.getElementById('inputTime').value = item.time;
+        document.getElementById('inputName').value = item.name;
+        document.getElementById('inputLocation').value = item.location;
+        itemModal.classList.add('open');
+    }
+
+    function closeModal() {
+        itemModal.classList.remove('open');
+    }
+
+    function saveItem() {
+        const time = document.getElementById('inputTime').value.trim();
+        const name = document.getElementById('inputName').value.trim();
+        const location = document.getElementById('inputLocation').value.trim();
+
+        if (!name) { alert("請至少輸入名稱"); return; }
+
+        const newItem = { time, name, location };
+
+        if (editingIndex === -1) {
+            // 新增
+            appData[currentDate].itinerary.push(newItem);
+        } else {
+            // 修改
+            appData[currentDate].itinerary[editingIndex] = newItem;
+        }
+
+        saveDataToStorage();
+        renderContent();
+        closeModal();
+    }
+
+    function deleteItem(index) {
+        if(confirm("確定要刪除這個行程嗎？")) {
+            appData[currentDate].itinerary.splice(index, 1);
+            saveDataToStorage();
+            renderContent();
+        }
+    }
+
+    // === 5. 提醒事項編輯邏輯 ===
+
+    function openReminderModal() {
+        const reminders = appData[currentDate].reminder || [];
+        document.getElementById('inputReminder').value = reminders.join("\n");
+        reminderModal.classList.add('open');
+    }
+
+    function closeReminderModal() {
+        reminderModal.classList.remove('open');
+    }
+
+    function saveReminder() {
+        const text = document.getElementById('inputReminder').value;
+        // 將文字依換行切割成陣列，並過濾空行
+        const newReminders = text.split("\n").map(r => r.trim()).filter(r => r !== "");
+        
+        appData[currentDate].reminder = newReminders;
+        saveDataToStorage();
+        renderContent();
+        closeReminderModal();
+    }
+
+    // 啟動
+    init();
+
   </script>
 </body>
 </html>
