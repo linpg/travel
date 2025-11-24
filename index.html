@@ -434,97 +434,127 @@
     // 資料 (保持不變)
     const data = {
       "2025-12-04": {
-        itinerary: [
-          { time: "11:00", name: "午餐：高千穂牛レストラン 和", location: "高千穂牛レストラン 和" },
-          { time: "13:30", name: "高千穗峽", location: "第1御鹽井停車場" },
-          { time: "15:00", name: "天岩戸神社", location: "天岩戶神社專用停車場" },
-          { time: "15:40", name: "天安河原 (散步)", location: "天安河原" },
-          { time: "17:00", name: "白川水源 (門票100¥)", location: "白川水源" },
-          { time: "19:00", name: "GU & Uniqlo 熊南店", location: "GU Kumanan" },
-          { time: "20:30", name: "入住 Airbnb", location: "2-chōme-8-54 Rendaiji, Nishi Ward, Kumamoto" },
-          { time: "21:00", name: "熊本耶誕市集 & 晚餐", location: "花畑廣場" }
-        ],
-        reminder: [
-          "【客運】台中 - 桃園 火車站發車 03:01",
-          "【航班】JX846 07:30-10:35",
-          "【BUDGET租賃】 預約號碼 : 00009540394"
-        ]
-      },
-      "2025-12-05": {
-        itinerary: [
-          { time: "09:00", name: "早餐 McDonald's", location: "McDonald's Kumamoto Heisei Oodori" },
-          { time: "10:50", name: "遊船 柳川川下り伯舟観光", location: "KAMENOI HOTEL YANAGAWA" },
-          { time: "12:00", name: "走路去泡腳", location: "The Karatachi Bunjin Footbath" },
-          { time: "12:30", name: "午餐：立花うどん 乌冬", location: "191 Mitsuhashimachi Takahatake, Yanagawa, Fukuoka 832-0826日本" },
-          { time: "14:30", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖PREMIUM OUTLETS" },
-          { time: "17:30", name: "三井LaLaport 福岡", location: "三井LaLaport 福岡" },
-          { time: "19:00", name: "Full full 明太子麵包", location: "Full full フルフル パンとワイン" },
-          { time: "20:30", name: "3COINS & 唐吉訶德 中洲店", location: "gate's Parking" },
-          { time: "22:00", name: "入住 Airbnb (Fukuoka)", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka" }
-        ],
-        reminder: [
-          "記得攜帶泡腳用的小毛巾。",
-          "遊船：上午11:00預約，請前5分鐘抵達「龜之井飯店柳川」大廳。"
-        ]
-      },
-      "2025-12-06": {
-        itinerary: [
-          { time: "08:30", name: "早餐 McDonald's / COFFEE", location: "マクドナルド 薬院店" },
-          { time: "10:00", name: "西溪公園 (楓葉)", location: "西渓公園" },
-          { time: "11:30", name: "武雄市圖書館 & 武雄神社", location: "武雄市圖書館" },
-          { time: "13:30", name: "午餐：くれよん漢堡之店", location: "くれよん漢堡之店" },
-          { time: "15:00", name: "嬉野溫泉足湯 & 豐玉姫神社", location: "嬉野温泉 湯宿広場" },
-          { time: "16:30", name: "轟之瀑布", location: "轟之瀑布" },
-          { time: "17:30", name: "祐德稻荷神社", location: "祐德稻荷神社" },
-          { time: "18:30", name: "大魚神社 海中鳥居", location: "大魚神社海中鳥居" },
-          { time: "20:00", name: "晚餐：一蘭 太宰府店", location: "3 Chome-1-30 Mukaizano, Dazaifu" }
-        ],
-        reminder: [
-          "武雄圖書館：內部禁止拍照，請留意。",
-          "漢堡店咖哩醬推薦。"
-        ]
-      },
-      "2025-12-07": {
-        itinerary: [
-          { time: "09:00", name: "早餐 BREAD＆CAFE", location: "BREAD＆CAFE" },
-          { time: "11:00", name: "門司港懷舊區", location: "門司港懷舊區" },
-          { time: "12:00", name: "午餐：唐戶市場 (壽司)", location: "下関 唐戸市場" },
-          { time: "14:00", name: "龜山八幡宮 & 赤間神宮", location: "赤間神宮" },
-          { time: "15:30", name: "九州鐵道紀念館", location: "九州鐵道紀念館" },
-          { time: "17:00", name: "皿倉山纜車 & 展望台", location: "帆柱公園駐車場" },
-          { time: "20:30", name: "晚餐：焼肉ベンジャミン (預約制)", location: "焼肉ベンジャミン" }
-        ],
-        reminder: [
-          "皿倉山纜車：17:11日落，19:00 前離開。",
-          "晚餐予約ID: XFT63F (20:30)"
-        ]
-      },
-      "2025-12-08": {
-        itinerary: [
-          { time: "10:00", name: "早餐/逛街 天神周邊", location: "Full full フルフル" },
-          { time: "11:00", name: "午餐：炉端ノいとおかし", location: "炉端ノいとおかし" },
-          { time: "13:00", name: "王貞治棒球紀念館-89公園", location: "王貞治棒球紀念館" },
-          { time: "15:00", name: "天神逛街 (HOKA, HUMAN MADE)", location: "大丸 福岡天神店" },
-          { time: "17:00", name: "下午茶：幸福pancake / I'm donut?", location: "I'm donut? 福岡店" },
-          { time: "19:00", name: "福岡聖誕活動", location: "福岡市役所西側ふれあい広場" },
-          { time: "21:00", name: "返回熊本入住", location: "Kumamoto" }
-        ],
-        reminder: [
-          "炉端ノいとおかし：預約ID YHZMLD，限時50分。",
-          "20:30 離開回熊本，房號 603，代碼 18807201"
-        ]
-      },
-      "2025-12-09": {
-        itinerary: [
-          { time: "09:00", name: "前往機場 / 還車", location: "バジェット･レンタカー 熊本空港店" },
-          { time: "11:45", name: "航班 JX847 (返程)", location: "Kumamoto Airport" }
-        ],
-        reminder: [
-          "路程 + 還車預留 1 小時。",
-          "【航班】JX847 11:45-13:25"
-        ]
-      }
-    };
+        itinerary: [
+          { time: "午餐 11:00〜14:30", name: "高千穂牛レストラン 和", location: "高千穂牛レストラン 和" },
+          { time: "景點", name: "高千穗峽", location: "第1御鹽井停車場" },
+          { time: "景點", name: "天岩戸神社", location: "天岩戶神社專用停車場" },
+          { time: "景點", name: "天安河原", location: "走路" },
+          { time: "景點 (門票100¥)", name: "白川水源", location: "白川水源" },
+          { time: "逛 10:00–20:00", name: "GU Kumanan", location: "GU Kumanan" },
+          { time: "逛 10:00–20:00", name: "Uniqlo 熊南店", location: "Uniqloユニクロ 熊南店" },
+          { time: "入住 15:00-23:00", name: "Airbnb", location: "2-chōme-8-54 Rendaiji, Nishi Ward, Kumamoto" },
+          { time: "逛 16:00-22:00", name: "熊本耶誕市集2025", location: "花畑廣場" },
+          { time: "晚餐", name: "タンとハラミ 焼肉いたる", location: "タンとハラミ 焼肉いたる" }
+        ],
+        reminder: [
+          "【客運】台中 - 桃園 火車站發車 03:01 (朝馬+30分)",
+          "【航班】JX846 07:30-10:35",
+          "【BUDGET租賃】 預約號碼 : 00009540394"
+        ]
+      },
+      "2025-12-05": {
+        itinerary: [
+          { time: "早餐", name: "McDonald's", location: "McDonald's Kumamoto Heisei Oodori" },
+          { time: "遊船 10:50", name: "柳川川下り伯舟観光", location: "KAMENOI HOTEL YANAGAWA" },
+          { time: "走路去泡腳", name: "The Karatachi Bunjin Footbath", location: "The Karatachi Bunjin (Writers) Footbath" },
+          { time: "午餐 11:00–15:00", name: "平價海鮮.定食 夜明茶屋", location: "平價海鮮.定食 夜明茶屋" },
+          { time: "逛", name: "鳥栖PREMIUM OUTLETS", location: "鳥栖PREMIUM OUTLETS" },
+          { time: "逛 Niko and", name: "三井LaLaport 福岡", location: "三井LaLaport 福岡" },
+          { time: "麵包 10:00–20:00", name: "Full full 明太子麵包", location: "Full full フルフル パンとワイン" },
+          { time: "停車", name: "Tenjin Coin Park (Mina+唐吉訶德)", location: "Tenjin Coin Park" },
+          { time: "停車 (Mina)", name: "Times", location: "タイムズイオンミーナ天神" },
+          { time: "停車 (唐吉訶德)", name: "gate's Parking", location: "gate's Parking" },
+          { time: "3COINS＋PLUS B1F", name: "Mina", location: "走路" },
+          { time: "逛", name: "唐吉訶德 中洲店", location: "走路" },
+          { time: "入住", name: "Airbnb (amp flat)", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka" },
+          { time: "備1停車", name: "Paraca Kego #3", location: "Paraca Kego #3" },
+          { time: "備2停車", name: "Time", location: "2 Chome-12-18 Kego, Chuo Ward, Fukuoka" },
+          { time: "備1晚餐 17:00–23:30", name: "串燒(雞)皮屋 警固店", location: "かわ屋 警固店" },
+          { time: "備2晚餐 17:00–00:00", name: "Ibushiza", location: "焼とりいぶし坐" }
+        ],
+        reminder: [
+          "記得攜帶泡腳用的小毛巾。",
+          "遊船：上午11:00預約，請前5分鐘抵達「龜之井飯店柳川」大廳。"
+        ]
+      },
+      "2025-12-06": {
+        itinerary: [
+          { time: "備1早餐 24H", name: "McDonald's", location: "マクドナルド 薬院店" },
+          { time: "備2早餐 08:00–00:00", name: "SHIROUZU COFFEE 警固店", location: "SHIROUZU COFFEE 警固店" },
+          { time: "景點 24H", name: "西溪公園 (楓葉)", location: "西渓公園" },
+          { time: "書店 09:00–21:00", name: "武雄市圖書館 (免料駐車場)", location: "武雄市圖書館·歷史資料館" },
+          { time: "景點 09:00–17:00", name: "武雄神社", location: "武雄神社" },
+          { time: "停車場", name: "Times'", location: "Times24h 'Siebold-No-Yu'" },
+          { time: "足湯 08:00–23:00", name: "嬉野溫泉湯宿廣場", location: "嬉野温泉 湯宿広場" },
+          { time: "景點", name: "白鯰魚 豐玉姫神社", location: "豊玉姫神社" },
+          { time: "咖啡 10:00–18:00", name: "蛋糕 うれし庵", location: "うれし庵" },
+          { time: "午餐 11:00–15:00", name: "くれよん漢堡之店", location: "くれよん漢堡之店" },
+          { time: "景點", name: "轟之瀑布 (免料駐車場)", location: "Hei-163-1 Ureshinomachi Oaza Shimojuku" },
+          { time: "停車場", name: "祐德稻荷神社 停車場", location: "Yutoku Inari Shrine Parking Lot" },
+          { time: "景點", name: "祐德稻荷神社 參道", location: "祐德稻荷神社 參道" },
+          { time: "甜點 10:00-18:00", name: "Kashima Natural Farm", location: "そば粉のスイーツ製造所Tora&Shika" },
+          { time: "景點", name: "大魚神社 海中鳥居", location: "大魚神社海中鳥居" },
+          { time: "晚餐", name: "一蘭 太宰府店", location: "3 Chome-1-30 Mukaizano, Dazaifu" },
+          { time: "入住", name: "Airbnb", location: "2-chōme-11-19 Kego, Chuo Ward, Fukuoka" }
+        ],
+        reminder: [
+          "記得攜帶泡腳小毛巾。",
+          "くれよん漢堡之店：咖哩醬非常好吃，推薦嘗試。"
+        ]
+      },
+      "2025-12-07": {
+        itinerary: [
+          { time: "早餐 08:00–20:30", name: "BREAD＆CAFE", location: "BREAD＆CAFE" },
+          { time: "早餐 08:00–00:00", name: "SHIROUZU COFFEE", location: "SHIROUZU COFFEE 警固店" },
+          { time: "備1停車", name: "Times", location: "Times Moji Minatomachi" },
+          { time: "備2停車", name: "D-Parking 門司港町第1", location: "D-Parking 門司港町第1" },
+          { time: "景點", name: "門司港懷舊區", location: "門司港懷舊區" },
+          { time: "午餐 08:00–15:00", name: "唐戶市場 (壽司)", location: "下関 唐戸市場" },
+          { time: "景點", name: "龜山八幡宮", location: "龜山八幡宮（龜山宮）" },
+          { time: "景點", name: "赤間神宮", location: "赤間神宮" },
+          { time: "點心", name: "MILKHALL MOJIKO (冰淇淋)", location: "MILKHALL MOJIKO" },
+          { time: "景點", name: "九州鐵道紀念館", location: "九州鐵道紀念館" },
+          { time: "景點", name: "門司電氣通訊懷舊館", location: "門司電氣通訊懷舊館" },
+          { time: "景點", name: "皿倉山纜車 & 展望台", location: "帆柱公園駐車場" },
+          { time: "晚餐 20:30", name: "焼肉ベンジャミン (預約制)", location: "焼肉ベンジャミン" }
+        ],
+        reminder: [
+          "皿倉山纜車：下午17:11日落 (現場買票)，19:00 前離開，回程車程約1.5小時。",
+          "晚餐予約ID: XFT63F (20:30)"
+        ]
+      },
+      "2025-12-08": {
+        itinerary: [
+          { time: "麵包 10:00–20:00", name: "Full full", location: "フルフル パンとワイン" },
+          { time: "午餐 11:00", name: "炉端ノいとおかし", location: "炉端ノいとおかし" },
+          { time: "景點 (現場票)", name: "王貞治棒球紀念館-89公園", location: "王貞治棒球紀念館-89公園" },
+          { time: "停車場", name: "Parking Lot", location: "Fukuokadaimyo Garden City Parking Lot" },
+          { time: "逛", name: "HOKA Fukuoka Tenjin", location: "HOKA Fukuoka Tenjin" },
+          { time: "吃", name: "幸福pancake 福岡天神店", location: "幸福pancake 福岡天神店" },
+          { time: "逛", name: "ABC-MART Grandstage", location: "ABC-MART GRANDSTAGE Fukuoka Nishi-dori Store" },
+          { time: "逛", name: "HUMAN MADE 福岡", location: "HUMAN MADE 福岡" },
+          { time: "逛", name: "大丸 福岡天神店", location: "大丸 福岡天神店" },
+          { time: "吃 10:00–19:00", name: "I'm donut? 福岡店", location: "I'm donut? 福岡店" },
+          { time: "活動", name: "福岡聖誕活動", location: "福岡市役所西側ふれあい広場" },
+          { time: "入住", name: "Airbnb (熊本)", location: "32.800778, 130.702056" },
+          { time: "停車場", name: "Times Sakuramachi #4", location: "タイムズ桜町第４" }
+        ],
+        reminder: [
+          "炉端ノいとおかし：預約ID YHZMLD，入座時間為50分鐘。",
+          "20:30 離開回熊本，23:00後不再接受入住。",
+          "房號 603，住戶代碼 18807201"
+        ]
+      },
+      "2025-12-09": {
+        itinerary: [
+          { time: "11:45-13:25", name: "航班 JX847 (返程)", location: "バジェット･レンタカー 熊本空港店" }
+        ],
+        reminder: [
+          "路程 + 還車預留 1 小時。",
+          "【航班】JX847 11:45-13:25"
+        ]
+      }
+    };
 
     function loadDates() {
       // 插入標題 (手機版會隱藏，桌面版在上方)
